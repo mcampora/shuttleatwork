@@ -1,4 +1,4 @@
-package server
+package shuttletowork.server
 
 class JSon {
   static def transform(def obj) {

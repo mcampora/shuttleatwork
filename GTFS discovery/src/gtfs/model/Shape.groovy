@@ -1,4 +1,4 @@
-package gtfs
+package gtfs.model
 
 import geo.*;
 

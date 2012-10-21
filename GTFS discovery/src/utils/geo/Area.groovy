@@ -1,10 +1,20 @@
-package geo
+package utils.geo
 
 class Area {
   Position max = new Position(-180.0, -180.0);
   Position min = new Position(180.0, 180.0);
 
   def Area() {
+  }
+
+  def Area(def min, def max) {
+	  this.min = min
+	  this.max = max
+  }
+
+  def Area(def minlat, def minlon, def maxlat, def maxlon) {
+	  this.min = new Position(minlat, minlon)
+	  this.max = new Position(maxlat, maxlon)
   }
 
   def extend(Position pos) {

@@ -1,4 +1,4 @@
-package gtfs
+package gtfs.model
 
 class Calendar {
 	def service_id;
@@ -11,7 +11,7 @@ class Calendar {
 	def sunday;
 	def start_date;
 	def end_date;
-	
+
 	String toString() {
 		return "[ service_id:'$service_id', monday:'$monday', tuesday:'$tuesday', " +
 		"wednesday:'$wednesday', thursday:'$thursday', friday:'$friday', saturday:'$saturday', " +

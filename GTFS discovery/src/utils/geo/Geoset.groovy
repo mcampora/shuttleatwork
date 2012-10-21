@@ -1,4 +1,4 @@
-package geo
+package utils.geo
 
 class Geoset {
   Area area = new Area();

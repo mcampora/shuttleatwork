@@ -1,4 +1,4 @@
-package geo
+package utils.geo
 
 class Position {
   double lat;

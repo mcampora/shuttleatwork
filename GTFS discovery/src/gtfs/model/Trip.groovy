@@ -1,4 +1,4 @@
-package gtfs
+package gtfs.model
 
 class Trip {
 	def route; // id
@@ -9,11 +9,11 @@ class Trip {
 	def block_id;
 	def shape; // id
 	def stoptimes = [];
-	
+
 	def addStopTime(def st) {
 		stoptimes.add(st);
 	}
-	
+
 
 	String toString() {
 		return "[ route:'${route.getRoute_id()}', service:'${service.getService_id()}', trip_id:'$trip_id', " +

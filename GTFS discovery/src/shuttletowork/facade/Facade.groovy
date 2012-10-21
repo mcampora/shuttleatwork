@@ -1,7 +1,7 @@
-package facade
+package shuttletowork.facade
 
 import geo.*;
-import gtfs.*
+import gtfs.reader.*
 import graph.*;
 
 class Facade {
@@ -19,7 +19,7 @@ class Facade {
 	def graph;
 
 	def Facade() {
-		reader = new FeedReader()
+		reader = new CsvFeedReader()
 		feed = reader.read(PATH)
 		graph = new Graph(feed)
 	}

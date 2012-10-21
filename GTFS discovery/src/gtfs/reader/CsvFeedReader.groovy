@@ -1,11 +1,12 @@
-package gtfs
+package gtfs.reader
 
 import geo.*;
+import gtfs.model.*
 
-class FeedReader {
+class CsvFeedReader {
 	String path
 	Feed feed
-	
+
 	Feed read(String path) {
 		this.path = path
 		feed = new Feed()
@@ -18,7 +19,7 @@ class FeedReader {
 		readStoptimes()
 		return feed
 	}
-	
+
 	def readFile(String name, def closure) {
 		def res
 		def head = true
@@ -32,7 +33,7 @@ class FeedReader {
 			}
 		}
 	}
-	
+
 	def readAgency() {
 		readFile("agency.txt") {
 			data ->
@@ -43,7 +44,7 @@ class FeedReader {
 			agency.setAgency_timezone(data[3])
 		}
 	}
-	
+
 	def readRoutes() {
 		readFile("routes.txt") {
 			data ->
@@ -61,7 +62,7 @@ class FeedReader {
 			feed.addRoute(route.getRoute_id(), route);
 		}
 	}
-	
+
 	def readShapes() {
 		readFile("shapes.txt") {
 			data ->
@@ -79,7 +80,7 @@ class FeedReader {
 			shape.addPoint(pt);
 		}
 	}
-	
+
 	def readCalendars() {
 		readFile("calendar.txt") {
 			data ->
@@ -97,7 +98,7 @@ class FeedReader {
 			feed.addCalendar(data[0], cal);
 		}
 	}
-	
+
 	def readTrips() {
 		readFile("trips.txt") {
 			data ->
@@ -112,7 +113,7 @@ class FeedReader {
 			feed.addTrip(data[2], trip);
 		}
 	}
-	
+
 	def readStops() {
 		readFile("stops.txt") {
 			data ->
@@ -128,7 +129,7 @@ class FeedReader {
 			feed.addStop(data[0], stop);
 		}
 	}
-	
+
 	def readStoptimes() {
 		readFile("stop_times.txt") {
 			data ->
@@ -150,5 +151,5 @@ class FeedReader {
 			t.addStopTime(stoptime);
 		}
 	}
-	
+
 }

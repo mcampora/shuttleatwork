@@ -1,4 +1,4 @@
-package graph
+package shuttletowork.graph
 
 import facade.*
 

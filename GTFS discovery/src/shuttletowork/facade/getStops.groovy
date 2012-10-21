@@ -1,4 +1,4 @@
-package facade
+package shuttletowork.facade
 
 import server.*
 

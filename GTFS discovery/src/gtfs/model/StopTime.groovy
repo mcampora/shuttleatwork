@@ -1,4 +1,4 @@
-package gtfs
+package gtfs.model
 
 class StopTime {
 	def trip_id;
@@ -10,7 +10,7 @@ class StopTime {
 	def pickup_type;
 	def drop_off_type;
 	def shape_dist_traveled;
-	
+
 	String toString() {
 		return "[ trip:'$trip_id', arrival_time:'$arrival_time', departure_time:'$departure_time', " +
 		"stop:'$stop_id', stop_sequence:'$stop_sequence', stop_headsign:'$stop_headsign', " +
