@@ -1,6 +1,6 @@
 package shuttletowork.server
 
-import facade.*;
+import shuttletowork.facade.*;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 

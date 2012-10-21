@@ -1,8 +1,8 @@
 package shuttletowork.facade
 
-import geo.*;
+import utils.geo.*;
 import gtfs.reader.*
-import graph.*;
+import shuttletowork.graph.*;
 
 class Facade {
 	static def wROOT='D:/Documents'

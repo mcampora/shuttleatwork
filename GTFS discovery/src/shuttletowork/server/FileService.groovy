@@ -1,6 +1,6 @@
 package shuttletowork.server
 
-import facade.*
+import shuttletowork.facade.*
 
 class FileService {
   def root
