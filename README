@@ -1,1 +1,17 @@
-Hello world!
+Objective
+---------
+GTFS prototype.
+The objective is to build an easy to use Web application one can use to find the next shuttle departure.
+The application will be designed to run on a mobile browser.
+
+Technical environment
+---------------------
+Server side application is developed in Groovy (1.8)
+Client side relies on JQuery mobile (x.x) and the Google Map API (x.x)
+
+Prerequisite
+------------
+Come as an Eclipse project.
+Probably work with different versions however I'm using Eclipse x.x and Groovy features x.x on Mac OS. 
+Does not need any Web container, launch TestServer.groovy a basic HTTP server. The root folder containing client files is [project]/home. GTF files are stored under [project]/rsc.
+
