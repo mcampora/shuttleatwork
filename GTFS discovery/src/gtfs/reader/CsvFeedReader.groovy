@@ -1,6 +1,6 @@
 package gtfs.reader
 
-import geo.*;
+import utils.geo.*;
 import gtfs.model.*
 
 class CsvFeedReader {
