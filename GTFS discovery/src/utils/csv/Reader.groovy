@@ -9,9 +9,9 @@ class Reader {
 		this.columnmap = columnmap
 	}
 
-	/*
-	 * accept a file name as input, a class type, a map of closure to call when
-	 * a column contains a key to be replaced with the associated value
+	/**
+	 * accept a file name as input, a class type, a map of closure to call when it matches a 
+	 * column (ex. replaced value with an object lookup)
 	 */
 	def translate(def file) {
 		def res = []
@@ -46,5 +46,4 @@ class Reader {
 		}
 		return obj
 	}
-
 }
