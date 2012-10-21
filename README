@@ -13,5 +13,4 @@ Prerequisite
 ------------
 Come as an Eclipse project.
 Probably work with different versions however I'm using Eclipse x.x and Groovy features x.x on Mac OS. 
-Does not need any Web container, launch TestServer.groovy a basic HTTP server. The root folder containing client files is [project]/home. GTF files are stored under [project]/rsc.
-
+Does not need any Web container, launch TestServer.groovy a basic HTTP server. The root folder containing client files is [project]/home. GTFS files are stored under [project]/rsc. Current files capture my company shuttle, routes and schedules connecting the various buildings.
