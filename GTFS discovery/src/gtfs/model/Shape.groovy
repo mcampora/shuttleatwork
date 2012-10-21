@@ -1,6 +1,6 @@
 package gtfs.model
 
-import geo.*;
+import utils.geo.*;
 
 class Shape {
 	def shape_id;

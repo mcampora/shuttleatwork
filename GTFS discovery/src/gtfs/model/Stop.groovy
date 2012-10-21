@@ -1,6 +1,6 @@
 package gtfs.model
 
-import geo.*;
+import utils.geo.*;
 
 class Stop {
 	def stop_id;
