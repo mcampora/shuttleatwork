@@ -1,5 +1,8 @@
 package gtfs.model
 
+/**
+ * A time at which the transport mode reach a given stop in a given trip 
+ */
 class StopTime {
 	def trip_id;
 	def arrival_time;

@@ -1,5 +1,9 @@
 package utils.geo
 
+/**
+ * Rectangular area based on mininum 2 geolocations
+ * Can be used to compute the enclosing area for a set of locations
+ */
 class Area {
   Position max = new Position(-180.0, -180.0);
   Position min = new Position(180.0, 180.0);

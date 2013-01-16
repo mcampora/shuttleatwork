@@ -1,5 +1,8 @@
 package gtfs.model
 
+/**
+ * Graphical attributes of a given route
+ */
 class Route {
 	def route_id;
 	def agency; // id

@@ -1,5 +1,8 @@
 package utils.geo
 
+/**
+ * Geolocation
+ */
 class Position {
   double lat;
   double lon;

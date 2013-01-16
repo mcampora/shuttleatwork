@@ -1,5 +1,12 @@
 package gtfs.model
 
+/**
+ * A trip represents the course of a given transport and the sequence of stops 
+ * it will do
+ * It is associated to a shape (the representation of its route),
+ * A service id (ie. a link to a week table),
+ * 
+ */
 class Trip {
 	def route; // id
 	def service; // id

@@ -1,5 +1,9 @@
 package utils.geo
 
+/**
+ * Collection of objects with an associated geolocation
+ * Help computing the enclosing area or find the nearest objects
+ */
 class Geoset {
   Area area = new Area();
 
@@ -13,7 +17,7 @@ class Geoset {
   }
 
   // TBD: stupid, at the moment go through the whole list
-  // need a quadtree to divide the plan and reduce complexity
+  // need a quadtree to divide the plan and reduce search complexity
   Object closest(Position pos) {
     Position rpos = null;
     Object robj = null;

@@ -2,6 +2,9 @@ package gtfs.model
 
 import utils.geo.*;
 
+/**
+ * A geographical point used to represent a route
+ */
 class ShapePoint {
 	def shape_pt_sequence;
 	def shape_dist_traveled;

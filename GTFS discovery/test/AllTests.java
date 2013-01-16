@@ -10,9 +10,10 @@ public class AllTests extends TestSuite {
 		TestSuite suite = new TestSuite(AllTests.class.getName());
 		//$JUnit-BEGIN$
 		GroovyTestSuite gsuite = new GroovyTestSuite();
-        suite.addTestSuite(gsuite.compile("test/utils/csv/ReaderTest.groovy"));
+        //suite.addTestSuite(gsuite.compile("test/utils/csv/ReaderTest.groovy"));
         suite.addTestSuite(gsuite.compile("test/utils/geo/PositionTest.groovy"));
         suite.addTestSuite(gsuite.compile("test/utils/geo/AreaTest.groovy"));
+        suite.addTestSuite(gsuite.compile("test/utils/geo/GeosetTest.groovy"));
         //$JUnit-END$
 		return suite;
 	}

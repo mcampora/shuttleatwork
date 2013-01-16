@@ -2,6 +2,9 @@ package gtfs.model
 
 import utils.geo.*;
 
+/**
+ * A stop in the trip (ex. a bus station, a subway station, ...)
+ */
 class Stop {
 	def stop_id;
 	def stop_name;

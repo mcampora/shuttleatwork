@@ -2,6 +2,10 @@ package gtfs.model
 
 import utils.geo.*;
 
+/**
+ * Entry point of the structure
+ * Check https://developers.google.com/transit/gtfs/reference for more details
+ */
 class Feed {
 	def agency = new Agency();
 	def routes = [:];

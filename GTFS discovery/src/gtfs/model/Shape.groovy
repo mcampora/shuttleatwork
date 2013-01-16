@@ -2,6 +2,9 @@ package gtfs.model
 
 import utils.geo.*;
 
+/**
+ * A vector of geographical points representing a route
+ */
 class Shape {
 	def shape_id;
 	def shape_pts = [];

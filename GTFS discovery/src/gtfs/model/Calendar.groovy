@@ -1,5 +1,9 @@
 package gtfs.model
 
+/**
+ * Week map, helps clarifying when a given service is available (ex. does not work on Monday)
+ * Can have different week maps depending on the period of the year (ex. summer schedule)
+ */
 class Calendar {
 	def service_id;
 	def monday;
