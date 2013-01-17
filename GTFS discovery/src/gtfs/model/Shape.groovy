@@ -3,7 +3,7 @@ package gtfs.model
 import utils.geo.*;
 
 /**
- * A vector of geographical points representing a route
+ * A vector of geographical points representing a route (deduced from the list of shape points)
  */
 class Shape {
 	def shape_id;

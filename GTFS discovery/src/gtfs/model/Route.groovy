@@ -5,6 +5,7 @@ package gtfs.model
  */
 class Route {
 	def route_id;
+	def agency_id;
 	def agency; // id
 	def route_short_name;
 	def route_long_name;

@@ -8,12 +8,15 @@ package gtfs.model
  * 
  */
 class Trip {
+	def route_id;
 	def route; // id
+	def service_id;
 	def service; // id
 	def trip_id;
 	def trip_headsign;
 	def direction_id;
 	def block_id;
+	def shape_id;
 	def shape; // id
 	def stoptimes = [];
 

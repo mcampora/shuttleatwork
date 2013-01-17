@@ -18,14 +18,16 @@ class Position {
   }
 
   def distance(Position pos) {
-    // orthodromic distance
-    // Ortho(A,B)=6371 x acos[cos(LatA) x cos(LatB) x cos(LongB-LongA)+sin(LatA) x sin(LatB)]
-    double res =
-      Math.acos(
-        Math.cos(lat) * Math.cos(pos.getLat()) * Math.cos(pos.getLon() - lon) +
-        Math.sin(lat) * Math.sin(pos.getLat())
-        ) * 6371.0;
-    return res;
+	  double earthRadius = 3958.75;
+	  double dLat = Math.toRadians(pos.lat-lat);
+	  double dLng = Math.toRadians(pos.lon-lon);
+	  double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+	  	Math.cos(Math.toRadians(lat)) * Math.cos(Math.toRadians(pos.lat)) *
+		Math.sin(dLng/2) * Math.sin(dLng/2);
+	  double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	  double dist = earthRadius * c;
+	  int meterConversion = 1609;
+	  return new Float(dist * meterConversion).floatValue();
   }
 
   String toString() {

@@ -10,33 +10,32 @@ class ReaderTest extends GroovyTestCase {
 	}
 
 	public void testTranslateLine() {
-		// create a reference object
-		def ref = new A()
-		ref.a = "1"
-		ref.b = "2"
-		
-		// initialize a reader
-		def r = new Reader(A, [:])
-		
 		// define headers
 		def h = ["a", "b"]
-
 		// define a line
 		def l = "1,2"
 
-		// get the corresponding object
+		//1. create a dynamic object
+		def ref = new Object()
+		ref.metaClass.a = "1"
+		ref.metaClass.b = "2"
+		def r = new Reader()
 		def res = r.translateLine(h, l)
-		
-		// compare to the reference object
 		assertEquals( res.a, ref.a )
 		assertEquals( res.b, ref.b )
 
-		// second test, translate 'b' into an integer
-		r.columnmap = ["b": { it.toInteger() }]
+		//2. create a specific object
+		ref = new A()
+		ref.a = "1"
+		ref.b = "2"
+		r = new Reader(A, null)
 		res = r.translateLine(h, l)
-		
-		// check that it no longers compare to the reference object
-		// and that the translation occured
+		assertEquals( res.a, ref.a )
+		assertEquals( res.b, ref.b )
+
+		//3. translate 'b' into an integer
+		r.closure = { it.b = it.b.toInteger() }
+		res = r.translateLine(h, l)
 		assertFalse( res.b == ref.b )
 		assertTrue( res.b instanceof Integer )
 	}
