@@ -41,7 +41,9 @@ class CsvFeedReader {
 			trip.setService(feed.getCalendar(trip.getService_id()));
 			feed.addTrip(trip.getTrip_id(), trip)
 		})
-		readStops()
+		readStops({ stop ->
+			feed.addStop(stop.getStop_id(), stop)
+		})
 		readStoptimes({ stoptime ->
 			Trip t = feed.getTrip(stoptime.getTrip_id())
 			t.addStopTime(stoptime);

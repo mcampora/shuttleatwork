@@ -1,6 +1,6 @@
 package shuttletowork.server
 
-import shuttletowork.facade.*;
+import shuttletowork.system.*;
 import groovy.lang.Binding;
 import groovy.util.GroovyScriptEngine;
 
@@ -16,15 +16,8 @@ class ScriptService {
     GroovyScriptEngine gse = new GroovyScriptEngine(root);
     Binding binding = new Binding();
     binding.setVariable("req", req);
-    def res = gse.run("facade/${name}.groovy", binding);
+    def res = gse.run("${name}.groovy", binding);
     //println "res: $res";
     return res.getBytes();
-  }
-
-  // test method
-  public static void main(String[] args) {
-	  def ss = new ScriptService("${Facade.ROOT}/src/")
-	  println ss.execute("helloWorld", null)
-	  println ss.execute("helloWorld", [a:'x'])
   }
 }

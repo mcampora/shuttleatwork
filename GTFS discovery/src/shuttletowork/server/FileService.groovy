@@ -1,6 +1,6 @@
 package shuttletowork.server
 
-import shuttletowork.facade.*
+import shuttletowork.system.*
 
 class FileService {
   def root
@@ -24,10 +24,4 @@ class FileService {
     return resp
   }
 
-  // test method
-  public static void main(String[] args) {
-	  def ss = new FileService("${Facade.ROOT}/home/")
-	  println ss.execute("index.html", null)
-	  println ss.execute("bus.png", null)
-  }
 }
