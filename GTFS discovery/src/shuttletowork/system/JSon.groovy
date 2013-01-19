@@ -14,7 +14,7 @@ class JSon {
     // if already streamed, stop recursion, return a reference
     def ref = map[obj]
     if (ref != null) {
-      println ref
+      //println ref
       return "{ 'jsonref':${ref} }"
     }
 
@@ -77,7 +77,7 @@ class JSon {
       res += " }"
     }
     else {
-      println "class: ${obj.class}"
+      //println "class: ${obj.class}"
     }
     return res
   }

@@ -1,6 +1,17 @@
-// fired when the map viewpoint is changed
-function onMapMove() {
-	console.log('onMapMove');
+// keep track of the user selections
+var origin = null;
+var destination = null;
+
+// if not null then the info window is displayed with its content
+var info = null;
+
+// list of routes
+var routes = null;
+
+// fired when the map viewpoint is changed or there's 
+// a need to refresh markers, routes and details
+function refreshMap() {
+	console.log('refreshMap');
 	if (stops != null) {
 		map.clearOverlays();
 	for (var i=0; i<stops.length; ++i) {
@@ -14,6 +25,7 @@ function onMapMove() {
 		displayDetails(origin.marker, info);
   }
 }
+// add a marker on the map corresponding to a given stop
 function addStopMarker(stop) {
     var icon;
     if (stop == origin) {
@@ -114,6 +126,7 @@ function onStopSelect(marker) {
 	// if we have just the origin, find possible routes
 	if ((origin != null) && (destination == null)) {
 		findRoutes(origin.stop_id, function() {
+			info = origin;
 			// force refresh
 			onMapMove();
 		});
@@ -121,7 +134,7 @@ function onStopSelect(marker) {
 	// if we have a pair fetch the route and show the detail view
 	else if ((origin != null) && (destination != null)) {
 		// find next departures
-		findNextDepartures(origin.stop_id, destination.stop_id, function(data) {
+		findItinerary(origin.stop_id, destination.stop_id, function(data) {
 			info = data;
 			// force refresh
 			onMapMove();
@@ -130,9 +143,9 @@ function onStopSelect(marker) {
 
 }
 
-function findNextDepartures(oid, did, fn) {
-	console.log('findRotue');
-	url = "/script/findRoute?origin_id=" + oid + "&destination_id=" + did;
+function findItinerary(oid, did, fn) {
+	console.log('findItinerary');
+	url = "/script/findItinerary?origin_id=" + oid + "&destination_id=" + did;
 	GDownloadUrl(url, function(obj) {
 		routes = eval('(' + obj + ')');
 		//alert(obj);

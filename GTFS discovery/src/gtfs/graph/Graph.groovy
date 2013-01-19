@@ -2,6 +2,7 @@ package gtfs.graph
 
 import facade.*
 
+
 class Graph {
 	def feed;
 	def edges = [:]

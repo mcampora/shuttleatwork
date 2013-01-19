@@ -53,11 +53,13 @@ class BaseHandler implements com.sun.net.httpserver.HttpHandler {
 }
 
 String FILE_ROOT = "${Env.ROOT}/home/"
-String SCRIPT_ROOT = "${Env.ROOT}/src/"
+String SCRIPT_ROOT = "${Env.ROOT}/src/shuttletowork/actions/"
+def PORT = 8000
 
 println ">Init server..."
-HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0)
+HttpServer server = HttpServer.create(new InetSocketAddress(PORT), 0)
 server.createContext("/file", new BaseHandler("/file", new FileService(FILE_ROOT)))
 server.createContext("/script", new BaseHandler("/script", new ScriptService(SCRIPT_ROOT)))
 server.setExecutor(null)
+println "connect to http://localhost:$PORT/file/index.html"
 server.start()

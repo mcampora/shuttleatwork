@@ -3,10 +3,6 @@ var iconOrigin;
 var iconDestination;
 var iconBackground;
 var stops;
-var origin = null;
-var destination = null;
-var info = null;
-var routes = null;
 
 // Initialize the map, zoom to fit with the selected feed(s), plot the stops
 function load() {
@@ -27,7 +23,7 @@ function load() {
 		});
 
 		// set callbacks
-		GEvent.addListener(map, "moveend", onMapMove);
+		GEvent.addListener(map, "moveend", refreshMap);
 		//GEvent.addListener(map, "zoomend", callbackZoomEnd);
 
 		// create bus stops icons
@@ -35,7 +31,7 @@ function load() {
 
 		// load bus stops and plot them on the map (pretend the map moved)
 		// add them also to the list in the sidebar
-		getStops(onMapMove);
+		getStops(refreshMap);
 	}
 }
 
@@ -53,16 +49,16 @@ function getArea(fn) {
 // create icons for the stops
 function initIcons() {
     iconDestination = makeStopIcon();
-    iconDestination.image = "/file/yellow_bus.png";
-    iconDestination.shadow = "/file/bus_shadow.png";
+    iconDestination.image = "/file/icons/yellow_bus.png";
+    iconDestination.shadow = "/file/icons/bus_shadow.png";
 
     iconOrigin = makeStopIcon();
-    iconOrigin.image = "/file/green_bus.png";
-    iconOrigin.shadow = "/file/bus_shadow.png";
+    iconOrigin.image = "/file/icons/green_bus.png";
+    iconOrigin.shadow = "/file/icons/bus_shadow.png";
 
     iconBackground = makeStopIcon();
-    iconBackground.image = "/file/bus.png";
-    iconBackground.shadow = "/file/bus_shadow.png";
+    iconBackground.image = "/file/icons/bus.png";
+    iconBackground.shadow = "/file/icons/bus_shadow.png";
 }
 function makeStopIcon() {
     var icon = new GIcon();
