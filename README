@@ -14,6 +14,6 @@ Client side relies on JQuery mobile (1.1.1) and the Google Map API (v2)
 Come as an Eclipse project.
 Probably work with different versions however I'm using Eclipse 3.6 and Groovy features 2.7.0 on Mac OS. 
 
-Does not need any Web container, launch TestServer.groovy a basic HTTP server. The root folder containing client files is [project]/home. 
+Does not need any Web container, launch MiniServer.groovy a basic HTTP server. The root folder containing client files is [project]/home. 
 
 GTFS files are stored under [project]/rsc. Current files capture my company shuttle, routes and schedules connecting the various buildings.
