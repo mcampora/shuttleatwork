@@ -6,7 +6,7 @@ var destination = null; // second selection
 var info = null; // should be non null after the first selection
 
 // list of routes
-var routes = null; // should be non null after the first selection
+var shapes = null; // should be non null after the first selection
 
 // fired when the map viewpoint is changed or there's
 // a need to refresh markers, routes and details
@@ -19,7 +19,7 @@ function refreshMap() {
   		var marker = addStopMarker(stop);
   		stop.marker = marker;
   	}
-	if (routes != null)
+	if (shapes != null)
 		displayShapes();
 	if (info != null)
 		displayDetails(origin.marker, info);
@@ -50,9 +50,9 @@ function displayShapes() {
 	console.log('displayShapes');
 	// retrieve the shapes corresponding to the first departure to a given destination (so 1 shape per destination)
 	var shapes = [];
-	if (routes != null) {
+	if (shapes != null) {
 		for (var p in routes.arcs) {
-			var pval = routes.arcs[p][0];
+			var pval = shapes.arcs[p][0];
 			if (pval != null) {
 				shapes[shapes.length] = pval.shape;
 			}
@@ -73,19 +73,19 @@ function displayShapes() {
   	}
 }
 function displayDetails(marker, info) {
-	console.log('displayShapes');
-	var latLng = marker.getLatLng();
-	var timeTrips = ""
+	console.log('displayDetails');
     var html = "<div class='stopinfo'>";
-	var html = html + "<span class='stopname'>" + marker.stop.stop_name + " (" + marker.stop.stop_id + ")</span><br/>";
-    html = html + "<span class='stopposition'>" + "[" + latLng.lat() + ", " + latLng.lng() + "]</span>";
-    html = html + "<div class='stopdepartures'>";
-    html = html + "<br/>";
-    html = html + "SA1 - From Naxos<br/>";
-    html = html + "09/08/2012 - 11:45<br/>";
-    html = html + "<br/>";
-    html = html + "SA2 - To Naxos<br/>";
-    html = html + "09/08/2012 - 12:15<br/>";
+	html = html + "<span class='stopname'>" + info.stop.stop_name + "</span><br/>";
+    for (var arcname in info.arcs) {
+    	if (arcname != "jsonid") {
+    		var arc = info.arcs[arcname];
+    		html = html + "<span class='routename'>" + arc[0].trip.route.route_long_name + " (" + arc[0].trip.route.route_id + ")</span><br/>";
+    		for (var i=0,len=arc.length; (i<len && i<3); i++) {
+    			html = html + "<li class='departure'>" + arc[i].trip.trip_headsign + " - " + arc[i].departure.departure_time + "</li><br/>";
+    		}
+    		html = html + "</ul>";
+    	}
+    }
     html = html + "</div></div>";
     origin.marker.openInfoWindowHtml(html);
 }
@@ -98,7 +98,7 @@ function onStopSelect(marker) {
 	if (origin == marker.stop) {
 		origin = null;
 		destination = null;
-		routes = null;
+		shapes = null;
 		info = null;
 		refreshMap();
 	}
@@ -106,28 +106,28 @@ function onStopSelect(marker) {
 	else if (origin == null) {
 		origin = marker.stop;
 		destination = null;
-		routes = null;
+		shapes = null;
 		info = null;
 	}
 	// if origin selected then the marker becomes the destination, complete path
 	else if ((origin != null) && (destination == null)) {
 		destination = marker.stop;
-		routes = null;
+		shapes = null;
 		info = null;
 	}
 	// if origin and destination are already selected then the marker becomes the new origin, partial path
 	else if ((origin != null) && (destination != null)) {
 		origin = marker.stop;
 		destination = null;
-		routes = null;
+		shapes = null;
 		info = null;
 	}
 
 	// if we have just the origin, find possible routes
 	if ((origin != null) && (destination == null)) {
 		findRoutes(origin.stop_id, function(data) {
-			//routes = data;
-			info = origin;
+			info = data;
+			//shapes = data.shapes;
 			// force refresh
 			refreshMap();
 		});
