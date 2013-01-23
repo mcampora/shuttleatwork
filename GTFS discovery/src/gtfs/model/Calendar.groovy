@@ -5,16 +5,16 @@ package gtfs.model
  * Can have different week maps depending on the period of the year (ex. summer schedule)
  */
 class Calendar {
-	def service_id;
-	def monday;
-	def tuesday;
-	def wednesday;
-	def thursday;
-	def friday;
-	def saturday;
-	def sunday;
-	def start_date;
-	def end_date;
+	String service_id;
+	String monday;
+	String tuesday;
+	String wednesday;
+	String thursday;
+	String friday;
+	String saturday;
+	String sunday;
+	String start_date;
+	String end_date;
 
 	String toString() {
 		return "[ service_id:'$service_id', monday:'$monday', tuesday:'$tuesday', " +

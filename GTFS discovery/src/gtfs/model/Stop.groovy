@@ -6,13 +6,13 @@ import utils.geo.*;
  * A stop in the trip (ex. a bus station, a subway station, ...)
  */
 class Stop {
-	def stop_id;
-	def stop_name;
-	def stop_desc;
-	def stop_lat;
-	def stop_lon;
-	def zone_id;
-	def stop_url;
+	String stop_id;
+	String stop_name;
+	String stop_desc;
+	String stop_lat;
+	String stop_lon;
+	String zone_id;
+	String stop_url;
 	
 	Position pos;
 	

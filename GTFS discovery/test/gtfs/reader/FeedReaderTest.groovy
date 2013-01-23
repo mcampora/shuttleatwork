@@ -16,8 +16,7 @@ class FeedReaderTest extends GroovyTestCase {
 
 	public void testRoutes() {
 		def reader = new CsvFeedReader(rootpath)
-		def routes = reader.readRoutes({ it.setAgency("agency"); })
-		assertEquals routes[0].agency, "agency"
+		def routes = reader.readRoutes()
 		assertEquals routes[0].route_id, "SA"
 		assertEquals routes[0].agency_id, "1A-SEP"
 	}
@@ -48,15 +47,10 @@ class FeedReaderTest extends GroovyTestCase {
 
 	public void testTrips() {
 		def reader = new CsvFeedReader(rootpath)
-		def trips = reader.readTrips({ trip ->
-			trip.setRoute(trip.getRoute_id());
-			trip.setService(trip.getService_id());
-		})
+		def trips = reader.readTrips()
 		assert trips.size() == 32
 		assertEquals trips[0].getRoute_id(), "SA"
-		assertEquals trips[0].getRoute(), "SA"
 		assertEquals trips[0].getService_id(), "WEEK"
-		assertEquals trips[0].getService(), "WEEK"
 	}
 
 	public void testStops() {
@@ -80,5 +74,6 @@ class FeedReaderTest extends GroovyTestCase {
 		assert feed.getStops() != null
 		assert feed.getStops().size() > 0
 		assert feed.getShapes().size() == 4
+		assert feed.getTrips().size() > 0
 	}
 }

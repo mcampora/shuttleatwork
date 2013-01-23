@@ -7,12 +7,12 @@ import utils.geo.*;
  * Check https://developers.google.com/transit/gtfs/reference for more details
  */
 class Feed {
-	def agency = new Agency();
-	def routes = [:];
-	def shapes = [:]
-	def calendars = [:];
-	def trips = [:];
-	def stops = [:];
+	Agency agency = new Agency();
+	Map<String,Route> routes = [:];
+	Map<String,Shape> shapes = [:]
+	Map<String,Calendar> calendars = [:];
+	Map<String,Trip> trips = [:];
+	Map<String,Stop> stops = [:];
 	Area bound = new Area();
 	Geoset set = new Geoset();
 

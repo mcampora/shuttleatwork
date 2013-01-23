@@ -2,13 +2,14 @@ package gtfs.graph
 
 class Edge {
 	def stop
-	def arcs = [:] // stop_id:[arc]
+	def arcs = [:] // stop_id+route_id:[arc]
 
 	def Edge(def feed, def stop) {
 		this.stop = stop
 		feed.getTrips().each { trip_id, trip ->
 			def capture = false
-			def arc = new Arc(trip)
+			def shape = feed.shapes[trip.shape_id]
+			def arc = new Arc(trip, shape)
 			trip.getStoptimes().each { stoptime ->
 				if (capture == true) {
 					arc.arrival = stoptime
@@ -19,7 +20,7 @@ class Edge {
 					}
 					array.add(arc)
 					capture = false
-					arc = new Arc(trip)
+					arc = new Arc(trip, shape)
 				}
 				else if (stoptime.getStop_id().equals(stop.stop_id)) {
 					arc.departure = stoptime

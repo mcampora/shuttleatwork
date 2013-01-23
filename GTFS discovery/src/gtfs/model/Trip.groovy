@@ -8,19 +8,16 @@ package gtfs.model
  * 
  */
 class Trip {
-	def route_id;
-	def route; // id
-	def service_id;
-	def service; // id
-	def trip_id;
-	def trip_headsign;
-	def direction_id;
-	def block_id;
-	def shape_id;
-	def shape; // id
-	def stoptimes = [];
+	String route_id;
+	String service_id;
+	String trip_id;
+	String trip_headsign;
+	String direction_id;
+	String block_id;
+	String shape_id;
+	List<StopTime> stoptimes = [];
 
-	def addStopTime(def st) {
+	def addStopTime(StopTime st) {
 		stoptimes.add(st);
 	}
 

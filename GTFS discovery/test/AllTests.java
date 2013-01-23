@@ -15,6 +15,7 @@ public class AllTests extends TestSuite {
         suite.addTestSuite(gsuite.compile("test/shuttletowork/server/FileServiceTest.groovy"));
         suite.addTestSuite(gsuite.compile("test/shuttletowork/server/ScriptServiceTest.groovy"));
         suite.addTestSuite(gsuite.compile("test/shuttletowork/model/FacadeTest.groovy"));
+        suite.addTestSuite(gsuite.compile("test/gtfs/graph/GraphTest.groovy"));
         suite.addTestSuite(gsuite.compile("test/gtfs/reader/FeedReaderTest.groovy"));
         suite.addTestSuite(gsuite.compile("test/utils/csv/ReaderTest.groovy"));
         suite.addTestSuite(gsuite.compile("test/utils/geo/PositionTest.groovy"));

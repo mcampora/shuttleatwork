@@ -23,7 +23,6 @@ class CsvFeedReader {
 		Feed feed = new Feed()
 		readAgency({ agency -> feed.setAgency(agency) })
 		readRoutes({ route ->
-			route.setAgency(feed.getAgency());
 			feed.addRoute(route.getRoute_id(), route);
 		})
 		readShapes({ pt ->
@@ -37,8 +36,6 @@ class CsvFeedReader {
 		})
 		readCalendars({ cal -> feed.addCalendar(cal.getService_id(), cal) })
 		readTrips({ trip -> 
-			trip.setRoute(feed.getRoute(trip.getRoute_id()));
-			trip.setService(feed.getCalendar(trip.getService_id()));
 			feed.addTrip(trip.getTrip_id(), trip)
 		})
 		readStops({ stop ->

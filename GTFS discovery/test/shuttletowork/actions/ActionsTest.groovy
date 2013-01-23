@@ -17,15 +17,15 @@ class ActionsTest extends GroovyTestCase {
 	public void testFindRoutes() {
 		def rr = execute("findRoutes", [stop_id:'GREEN_SIDE'])
 		assert rr != null
-		assert rr.startsWith("{ 'jsonid':1, 'stop_id':'GREEN_SIDE'")
+		assert rr.startsWith("{ 'jsonid':1, 'stop':{ 'jsonid':2, 'stop_id':'GREEN_SIDE'")
 		
 		rr = execute("findRoutes", [stop_id:'TEMPLIERS'])
 		assert rr != null
-		assert rr.startsWith("{ 'jsonid':1, 'stop_id':'TEMPLIERS'")
+		assert rr.startsWith("{ 'jsonid':1, 'stop':{ 'jsonid':2, 'stop_id':'TEMPLIERS'")
 
 		rr = execute("findRoutes", [stop_id:'NAXOS'])
 		assert rr != null
-		assert rr.startsWith("{ 'jsonid':1, 'stop_id':'NAXOS'")
+		assert rr.startsWith("{ 'jsonid':1, 'stop':{ 'jsonid':2, 'stop_id':'NAXOS'")
 	}
 	
 	public void testGetArea() {
