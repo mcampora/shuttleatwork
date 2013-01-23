@@ -1,14 +1,14 @@
 // keep track of the user selections
-var origin = null;
-var destination = null;
+var origin = null; // first selection
+var destination = null; // second selection
 
 // if not null then the info window is displayed with its content
-var info = null;
+var info = null; // should be non null after the first selection
 
 // list of routes
-var routes = null;
+var routes = null; // should be non null after the first selection
 
-// fired when the map viewpoint is changed or there's 
+// fired when the map viewpoint is changed or there's
 // a need to refresh markers, routes and details
 function refreshMap() {
 	console.log('refreshMap');
@@ -100,7 +100,7 @@ function onStopSelect(marker) {
 		destination = null;
 		routes = null;
 		info = null;
-		onMapMove();
+		refreshMap();
 	}
 	// if no selection then the marker becomes the origin, partial path
 	else if (origin == null) {
@@ -125,10 +125,11 @@ function onStopSelect(marker) {
 
 	// if we have just the origin, find possible routes
 	if ((origin != null) && (destination == null)) {
-		findRoutes(origin.stop_id, function() {
+		findRoutes(origin.stop_id, function(data) {
+			//routes = data;
 			info = origin;
 			// force refresh
-			onMapMove();
+			refreshMap();
 		});
 	}
 	// if we have a pair fetch the route and show the detail view
@@ -137,7 +138,7 @@ function onStopSelect(marker) {
 		findItinerary(origin.stop_id, destination.stop_id, function(data) {
 			info = data;
 			// force refresh
-			onMapMove();
+			refreshMap();
 		});
 	}
 
@@ -147,10 +148,10 @@ function findItinerary(oid, did, fn) {
 	console.log('findItinerary');
 	url = "/script/findItinerary?origin_id=" + oid + "&destination_id=" + did;
 	GDownloadUrl(url, function(obj) {
-		routes = eval('(' + obj + ')');
-		//alert(obj);
+		alert(obj);
+		var data = eval('(' + obj + ')');
 		if (fn != null)
-			fn(routes);
+			fn(data);
 	});
 }
 
@@ -158,9 +159,9 @@ function findRoutes(id, fn) {
 	console.log('findRoutes');
 	url = "/script/findRoutes?stop_id=" + id;
 	GDownloadUrl(url, function(obj) {
-		routes = eval('(' + obj + ')');
+		var data = eval('(' + obj + ')');
 		if (fn != null)
-			fn(routes);
+			fn(data);
 	});
 }
 
