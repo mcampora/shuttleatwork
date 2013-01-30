@@ -75,13 +75,18 @@ function displayShapes() {
 function displayDetails(marker, info) {
 	console.log('displayDetails');
     var html = "<div class='stopinfo'>";
-	html = html + "<span class='stopname'>" + info.stop.stop_name + "</span><br/>";
-    for (var arcname in info.arcs) {
-    	if (arcname != "jsonid") {
-    		var arc = info.arcs[arcname];
-    		html = html + "<span class='routename'>" + arc[0].trip.route.route_long_name + " (" + arc[0].trip.route.route_id + ")</span><br/>";
-    		for (var i=0,len=arc.length; (i<len && i<3); i++) {
-    			html = html + "<li class='departure'>" + arc[i].trip.trip_headsign + " - " + arc[i].departure.departure_time + "</li><br/>";
+	html = html + "<span class='stopname'>" + marker.stop.stop_name + "</span><br/>";
+    for (var route in info) {
+    	if (route != "jsonid") {
+    		html = html + "<span class='routename'>" + route + " (" + route + ")</span><br/>";
+    		var arcs = info[route];
+    		for (var i=0,len=arcs.length; i<len; i++) {
+    			var arc = arcs[i]
+    			html = html + "<li class='departure'>" + arc.destination_id + "</li><br/>";
+	    		for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
+    				html = html + "<li class='departure'>" + 
+    					arcs[i].times[0].trip_id + " - " + arcs[i].times[i].departure_time + "</li><br/>";
+	    		}
     		}
     		html = html + "</ul>";
     	}

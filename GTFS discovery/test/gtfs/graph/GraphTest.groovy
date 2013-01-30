@@ -9,20 +9,24 @@ class GraphTest extends GroovyTestCase {
 
 	@Test
 	public void testBuildGraph() {
+		println "testBuildGraph"
 		def reader = new CsvFeedReader(rootpath)
 		def feed = reader.read()
 		Graph        g = new Graph(feed)
 		assert       g.edges["TEMPLIERS"] != null
 		assert       g.edges["UNKNOWN"] == null
 		assert       g.edges.size() == 6
-		assert       g.edges["TEMPLIERS"].arcs["GREEN_SIDE"] != null
-		assert       g.edges["TEMPLIERS"].arcs["GREEN_SIDE"][0].trip != null
-		assertEquals g.edges["TEMPLIERS"].arcs["GREEN_SIDE"][0].trip.route_id, "SB"
-		assertEquals g.edges["TEMPLIERS"].arcs["GREEN_SIDE"][0].trip.trip_id, "SBdown01"
-		assertEquals g.edges["TEMPLIERS"].arcs["GREEN_SIDE"][0].trip.trip_headsign, "To Greenside"
-		assertEquals g.edges["TEMPLIERS"].arcs["GREEN_SIDE"][0].arrival.trip_id, "SBdown01"
-		assertEquals g.edges["TEMPLIERS"].arcs["GREEN_SIDE"][0].departure.departure_time, "11:58:00"
-		//assert       g.edges["TEMPLIERS"].arcs["GREEN_SIDE"][0].trip.shape != null
+		
+		assert       g.edges["TEMPLIERS"].d_arcs["MAIN_SITE"] != null
+		assert       g.edges["TEMPLIERS"].d_arcs["MAIN_SITE"].size() == 1
+		assert       g.edges["TEMPLIERS"].d_arcs["MAIN_SITE"][0].route_id == "SB"
+		
+		assert       g.edges["TEMPLIERS"].d_arcs["GREEN_SIDE"] != null
+		assert       g.edges["TEMPLIERS"].d_arcs["GREEN_SIDE"].size() == 1
+		assert       g.edges["TEMPLIERS"].d_arcs["GREEN_SIDE"][0].route_id == "SB"
+
+		assertEquals g.edges["TEMPLIERS"].d_arcs["GREEN_SIDE"][0].times[7].trip_id, "SBdown08"
+		assertEquals g.edges["TEMPLIERS"].d_arcs["GREEN_SIDE"][0].times[7].departure_time, "14:13:00"
 	}
 
 	@Test

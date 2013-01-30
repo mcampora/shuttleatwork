@@ -2,7 +2,6 @@ package shuttletowork.system;
 
 import static org.junit.Assert.*;
 import groovy.util.GroovyTestCase;
-import shuttletowork.system.*;
 
 class JSonTest extends GroovyTestCase {
 	static class AA {

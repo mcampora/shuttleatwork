@@ -21,7 +21,6 @@ class Trip {
 		stoptimes.add(st);
 	}
 
-
 	String toString() {
 		return "[ route:'${route.getRoute_id()}', service:'${service.getService_id()}', trip_id:'$trip_id', " +
 		"trip_headsign:'$trip_headsign', direction_id:'$direction_id', block_id:'$block_id', " +
