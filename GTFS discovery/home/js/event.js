@@ -6,7 +6,7 @@ var destination = null; // second selection
 var info = null; // should be non null after the first selection
 
 // list of routes
-var shapes = null; // should be non null after the first selection
+var hshapes = null; // should be non null after the first selection
 
 // fired when the map viewpoint is changed or there's
 // a need to refresh markers, routes and details
@@ -14,12 +14,14 @@ function refreshMap() {
 	console.log('refreshMap');
 	if (stops != null) {
 		map.clearOverlays();
-	for (var i=0; i<stops.length; ++i) {
-		var stop = stops[i];
-  		var marker = addStopMarker(stop);
-  		stop.marker = marker;
+	for (var stop_id in stops) {
+		if (stop_id != "jsonid") {
+			var stop = stops[stop_id];
+  			var marker = addStopMarker(stop);
+  			stop.marker = marker;
+		}
   	}
-	if (shapes != null)
+	if (hshapes != null)
 		displayShapes();
 	if (info != null)
 		displayDetails(origin.marker, info);
@@ -75,18 +77,33 @@ function displayShapes() {
 function displayDetails(marker, info) {
 	console.log('displayDetails');
     var html = "<div class='stopinfo'>";
+
+    // name of the stop
 	html = html + "<span class='stopname'>" + marker.stop.stop_name + "</span><br/>";
-    for (var route in info) {
-    	if (route != "jsonid") {
-    		html = html + "<span class='routename'>" + route + " (" + route + ")</span><br/>";
-    		var arcs = info[route];
+    
+    for (var route_id in info) {
+    	if (route_id != "jsonid") {
+    		var route = routes[route_id];
+    		
+    		// name of the route
+    		html = html + "<span class='routename' style='background-color:#" + route.route_color + 
+    			";color:#" + route.route_text_color + ";'>" + route.route_long_name + " (" + route.route_short_name + 
+    			")</span><br/><ul>";
+			
+    		var arcs = info[route_id];
     		for (var i=0,len=arcs.length; i<len; i++) {
-    			var arc = arcs[i]
-    			html = html + "<li class='departure'>" + arc.destination_id + "</li><br/>";
+    			var arc = arcs[i];
+    			var destination = stops[arc.destination_id];
+    			
+    			// name of the next stop
+    			html = html + "<li class='destination'>" + destination.stop_name + "</li><br/><ul>";
+    			
 	    		for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
+	    			var trip = trips[arcs[i].times[j].trip_id]
     				html = html + "<li class='departure'>" + 
-    					arcs[i].times[0].trip_id + " - " + arcs[i].times[i].departure_time + "</li><br/>";
+    					trip.trip_headsign + " - " + arcs[i].times[j].departure_time + "</li><br/>";
 	    		}
+	    		html = html + "</ul>";
     		}
     		html = html + "</ul>";
     	}

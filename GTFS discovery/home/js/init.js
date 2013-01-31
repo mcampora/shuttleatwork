@@ -3,6 +3,9 @@ var iconOrigin;
 var iconDestination;
 var iconBackground;
 var stops;
+var trips;
+var routes;
+var shapes;
 
 // Initialize the map, zoom to fit with the selected feed(s), plot the stops
 function load() {
@@ -32,6 +35,11 @@ function load() {
 		// load bus stops and plot them on the map (pretend the map moved)
 		// add them also to the list in the sidebar
 		getStops(refreshMap);
+		
+		// load also routes and trips
+		getTrips();
+		getRoutes();
+		getShapes();
 	}
 }
 
@@ -69,13 +77,43 @@ function makeStopIcon() {
     return icon;
 }
 
+function getContent(url, fn) {
+	GDownloadUrl(url, function(msg) {
+		//console.log(msg);
+		var obj = eval('(' + msg + ')');
+		if (fn != null)
+			fn(obj);
+	});
+}
+
 //get the stops and their respective position
 function getStops(fn) {
-	url = "/script/getStops";
-	GDownloadUrl(url, function(obj) {
-		console.log(obj);
-		stops = eval('(' + obj + ')');
-		if (fn != null)
-			fn(stops);
+	getContent("/script/getStops", function(obj){
+		stops = obj;
+		if (fn != null) fn(stops);
+	});
+}
+
+//get the trips
+function getTrips(fn) {
+	getContent("/script/getTrips", function(obj){
+		trips = obj;
+		if (fn != null) fn(trips);
+	});
+}
+
+//get the routes
+function getRoutes(fn) {
+	getContent("/script/getRoutes", function(obj){
+		routes = obj;
+		if (fn != null) fn(routes);
+	});
+}
+
+//get the shapes
+function getShapes(fn) {
+	getContent("/script/getShapes", function(obj){
+		shapes = obj;
+		if (fn != null) fn(shapes);
 	});
 }
