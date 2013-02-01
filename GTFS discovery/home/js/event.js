@@ -118,7 +118,10 @@ function displayDetails(marker, info) {
 function onStopSelect(marker) {
 	console.log('onStopSelect');
 
-	// if origin selected and the marker is the origin then clear selection, no more path
+	// simplified version of the experience
+	// only one selection possible at this time
+
+	// if origin selected and the marker is the origin then clear selection, no more details or shapes
 	if (origin == marker.stop) {
 		origin = null;
 		destination = null;
@@ -126,46 +129,49 @@ function onStopSelect(marker) {
 		info = null;
 		refreshMap();
 	}
-	// if no selection then the marker becomes the origin, partial path
-	else if (origin == null) {
+
+	// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
+	else { //if (origin == null) {
 		origin = marker.stop;
 		destination = null;
 		shapes = null;
 		info = null;
 	}
+
+	// ignored at the moment
 	// if origin selected then the marker becomes the destination, complete path
-	else if ((origin != null) && (destination == null)) {
-		destination = marker.stop;
-		shapes = null;
-		info = null;
-	}
+	//else if ((origin != null) && (destination == null)) {
+	//	destination = marker.stop;
+	//	shapes = null;
+	//	info = null;
+	//}
 	// if origin and destination are already selected then the marker becomes the new origin, partial path
-	else if ((origin != null) && (destination != null)) {
-		origin = marker.stop;
-		destination = null;
-		shapes = null;
-		info = null;
-	}
+	//else if ((origin != null) && (destination != null)) {
+	//	origin = marker.stop;
+	//	destination = null;
+	//	shapes = null;
+	//	info = null;
+	//}
 
 	// if we have just the origin, find possible routes
 	if ((origin != null) && (destination == null)) {
 		findRoutes(origin.stop_id, function(data) {
 			info = data;
-			//shapes = data.shapes;
-			// force refresh
-			refreshMap();
-		});
-	}
-	// if we have a pair fetch the route and show the detail view
-	else if ((origin != null) && (destination != null)) {
-		// find next departures
-		findItinerary(origin.stop_id, destination.stop_id, function(data) {
-			info = data;
+			//hshapes = data.shapes;
 			// force refresh
 			refreshMap();
 		});
 	}
 
+	// if we have a pair fetch the route and show the detail view
+	//else if ((origin != null) && (destination != null)) {
+		// find next departures
+		//findItinerary(origin.stop_id, destination.stop_id, function(data) {
+			//info = data;
+			// force refresh
+			//refreshMap();
+		//});
+	//}
 }
 
 function findItinerary(oid, did, fn) {
