@@ -36,7 +36,7 @@ class BaseHandler implements com.sun.net.httpserver.HttpHandler {
       def req = splitURI(t.getRequestURI())
       def response = service.execute(req[0], req[1])
       if (response == null) {
-        response = []
+        response = "404 File not found!".getBytes()
         status = 404
         println 'File not found!'
       }

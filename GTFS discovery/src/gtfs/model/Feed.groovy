@@ -7,6 +7,7 @@ import utils.geo.*;
  * Check https://developers.google.com/transit/gtfs/reference for more details
  */
 class Feed {
+	String name;
 	Agency agency = new Agency();
 	Map<String,Route> routes = [:];
 	Map<String,Shape> shapes = [:]

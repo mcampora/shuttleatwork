@@ -8,19 +8,22 @@ import gtfs.model.*;
  * Build a feed in memory based on a set of CSV files
  * need a path to find the files
  * translate some of the keys into direct references
- * TBD 
+ * TBD
  * 	1/ decouple the data source from the object creation (ie. data could come from the database as table, columns and rows)
  * 	2/ control inconsistencies errors and generate a report
  */
 class CsvFeedReader {
 	String path
-	
-	def CsvFeedReader(def path) {
-		this.path = path
+	String name
+
+	def CsvFeedReader(def path, def name) {
+		this.path = "$path/$name/"
+		this.name = name
 	}
-	
+
 	Feed read() {
 		Feed feed = new Feed()
+		feed.name = name
 		readAgency({ agency -> feed.setAgency(agency) })
 		readRoutes({ route ->
 			feed.addRoute(route.getRoute_id(), route);
@@ -35,7 +38,7 @@ class CsvFeedReader {
 			shape.addPoint(pt);
 		})
 		readCalendars({ cal -> feed.addCalendar(cal.getService_id(), cal) })
-		readTrips({ trip -> 
+		readTrips({ trip ->
 			feed.addTrip(trip.getTrip_id(), trip)
 		})
 		readStops({ stop ->
@@ -52,7 +55,7 @@ class CsvFeedReader {
 		def reader = new Reader(clazz, closure)
 		return reader.translate(path + name)
 	}
-	
+
 	def readAgency(closure) {
 		return readFile("agency.txt", Agency.class, closure)[0]
 	}
@@ -71,18 +74,18 @@ class CsvFeedReader {
 	def readCalendars(closure) {
 		return readFile("calendar.txt", Calendar.class, closure)
 	}
-	
+
 	def readTrips(closure) {
-		return readFile("trips.txt", Trip.class, closure)	
+		return readFile("trips.txt", Trip.class, closure)
 	}
-	
+
 	def readStops(closure) {
 		return readFile("stops.txt", Stop.class, { stop ->
 			stop.setPos(new Position(stop.getStop_lat(), stop.getStop_lon()));
 			if (closure != null) closure(stop)
 		})
 	}
-	
+
 	def readStoptimes(closure) {
 		return readFile("stop_times.txt", StopTime.class, closure)
 	}

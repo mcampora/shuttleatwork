@@ -1,81 +1,41 @@
-// keep track of the user selections
-var origin = null; // first selection
-var destination = null; // second selection
+var origin  = null; // keep track of the user selection
+var info    = null; // if not null then the info window is displayed with its content
 
-// if not null then the info window is displayed with its content
-var info = null; // should be non null after the first selection
-
-// list of routes
-var hshapes = null; // should be non null after the first selection
-
-// fired when the map viewpoint is changed or there's
-// a need to refresh markers, routes and details
+// fired when the map viewpoint or content is changed
 function refreshMap() {
 	console.log('refreshMap');
-	if (stops != null) {
-		map.clearOverlays();
+	map.clearOverlays();
 	for (var stop_id in stops) {
 		if (stop_id != "jsonid") {
 			var stop = stops[stop_id];
-  			var marker = addStopMarker(stop);
-  			stop.marker = marker;
+			addStopMarker(stop);
 		}
-  	}
-	if (hshapes != null)
-		displayShapes();
+	}
 	if (info != null)
 		displayDetails(origin.marker, info);
-  }
 }
+
 // add a marker on the map corresponding to a given stop
 function addStopMarker(stop) {
     var icon;
     if (stop == origin) {
       icon = iconOrigin;
     }
-    else if (stop == destination) {
-    	icon = iconDestination;
-    }
     else {
       icon = iconBackground;
     }
     var ll = new GLatLng(stop.pos.lat, stop.pos.lon);
-    var marker;
-    marker = new GMarker(ll, {icon: icon, draggable: false});
+    var marker = new GMarker(ll, {icon: icon, draggable: false});
     marker.stop = stop;
     stop.marker = marker;
     map.addOverlay(marker);
     marker.clickListener = GEvent.addListener(marker, "click", function() {onStopSelect(marker);});
-    return marker;
 }
-function displayShapes() {
-	console.log('displayShapes');
-	// retrieve the shapes corresponding to the first departure to a given destination (so 1 shape per destination)
-	var shapes = [];
-	if (shapes != null) {
-		for (var p in routes.arcs) {
-			var pval = shapes.arcs[p][0];
-			if (pval != null) {
-				shapes[shapes.length] = pval.shape;
-			}
-		}
-	}
-	//console.log(shapes);
-	for (var j=0; j<shapes.length; j++) {
-		var shape = shapes[j];
-		//console.log(shape);
-		var linePoints = Array();
-		for (var i = 0; i < shape.shape_pts.length; i++) {
-			var ll = new GLatLng(shape.shape_pts[i].pos.lat, shape.shape_pts[i].pos.lon);
-			linePoints[linePoints.length] = ll;
-		}
-		var color; // = shape.route.route_color;
-		var polyline = new GPolyline(linePoints, color, 4);
-		map.addOverlay(polyline);
-  	}
-}
+
+// called when a stop is selected
 function displayDetails(marker, info) {
 	console.log('displayDetails');
+    var hshapes = [];
     var html = "<div class='stopinfo'>";
 
     // name of the stop
@@ -104,6 +64,9 @@ function displayDetails(marker, info) {
 	    		for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
 	    			var trip = trips[arcs[i].times[j].trip_id]
     				html = html + "<li>" + trip.trip_headsign + " - " + arcs[i].times[j].departure_time + "</li>";
+	    			var shape = shapes[trip.shape_id];
+	    			shape.color = route.route_color;
+	    			hshapes[trip.shape_id] = shape;
 	    		}
 	    		html = html + "</ul>";
     		}
@@ -111,67 +74,44 @@ function displayDetails(marker, info) {
     	}
     }
     html = html + "</div></div>";
+    displayShapes(hshapes);
     origin.marker.openInfoWindowHtml(html);
+}
+
+// complete displayDetails
+function displayShapes(hshapes) {
+	console.log('displayShapes');
+	for (var nshape in hshapes) {
+		var shape = hshapes[nshape];
+		//console.log(shape);
+		var linePoints = Array();
+		for (var i = 0; i < shape.shape_pts.length; i++) {
+			var ll = new GLatLng(shape.shape_pts[i].pos.lat, shape.shape_pts[i].pos.lon);
+			linePoints[linePoints.length] = ll;
+		}
+		var color = shape.color;
+		var polyline = new GPolyline(linePoints, color, 4);
+		map.addOverlay(polyline);
+  	}
 }
 
 // fired when the user select a stop on the map
 function onStopSelect(marker) {
 	console.log('onStopSelect');
-
-	// simplified version of the experience
-	// only one selection possible at this time
-
 	// if origin selected and the marker is the origin then clear selection, no more details or shapes
 	if (origin == marker.stop) {
 		origin = null;
-		destination = null;
-		shapes = null;
 		info = null;
 		refreshMap();
 	}
-
 	// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
-	else { //if (origin == null) {
+	else {
 		origin = marker.stop;
-		destination = null;
-		shapes = null;
-		info = null;
-	}
-
-	// ignored at the moment
-	// if origin selected then the marker becomes the destination, complete path
-	//else if ((origin != null) && (destination == null)) {
-	//	destination = marker.stop;
-	//	shapes = null;
-	//	info = null;
-	//}
-	// if origin and destination are already selected then the marker becomes the new origin, partial path
-	//else if ((origin != null) && (destination != null)) {
-	//	origin = marker.stop;
-	//	destination = null;
-	//	shapes = null;
-	//	info = null;
-	//}
-
-	// if we have just the origin, find possible routes
-	if ((origin != null) && (destination == null)) {
 		findRoutes(origin.stop_id, function(data) {
 			info = data;
-			//hshapes = data.shapes;
-			// force refresh
 			refreshMap();
 		});
 	}
-
-	// if we have a pair fetch the route and show the detail view
-	//else if ((origin != null) && (destination != null)) {
-		// find next departures
-		//findItinerary(origin.stop_id, destination.stop_id, function(data) {
-			//info = data;
-			// force refresh
-			//refreshMap();
-		//});
-	//}
 }
 
 function findItinerary(oid, did, fn) {
