@@ -19,7 +19,7 @@ class Graph {
 		feed.stops.each { stop_id, stop ->
 			edges[stop_id] = new Edge(stop_id)
 		}
-		// a bus will follow a given route several times during 
+		// a bus will follow a given route several times during
 		// a day that's what is called a trip
 		// take trips one by one
 		feed.trips.each { trip_id, trip ->
@@ -39,6 +39,10 @@ class Graph {
 
 	def findRoutes(def start) {
 		return edges[start].r_arcs
+	}
+
+	def findRoutes(def start, def time) {
+
 	}
 
 	def findRoute(def start, def end) {

@@ -11,7 +11,7 @@ class Edge {
 
 	// the list of arcs going through this stop indexed by route id and destination id
 	Map<String,Arc> arcs = [:]
-	
+
 	// indexed by route id
 	Map<String,List<Arc>> r_arcs = [:]
 	// indexed by destination id
@@ -25,12 +25,12 @@ class Edge {
 		Arc arc = arcs["$route_id-$destination_id"]
 		List<Arc> r_arc = r_arcs[route_id]
 		List<Arc> d_arc = d_arcs[destination_id]
-		
+
 		if (r_arc == null) {
 			r_arc = []
 			r_arcs[route_id] = r_arc
 		}
-		
+
 		if (d_arc == null) {
 			d_arc = []
 			d_arcs[destination_id] = d_arc
@@ -43,14 +43,14 @@ class Edge {
 			d_arc.add(arc)
 			//println "$stop_id - $route_id - $stop_id -> $destination_id"
 		}
-		
+
 		arc.addTime(trip_id, departure_time, arrival_time)
 	}
-	
+
 	public String toString() {
 		return "Edge:${stop_id}"
 	}
-	
+
 	def findRoute(def edges, def stop_list, def destination_id) {
 		println "${stop_list.size()}"
 		if (stop_id.equals(destination_id))
