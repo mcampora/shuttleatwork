@@ -42,7 +42,7 @@ class Graph {
 	}
 
 	def findRoutes(def start, def time) {
-
+		return [:]
 	}
 
 	def findRoute(def start, def end) {
