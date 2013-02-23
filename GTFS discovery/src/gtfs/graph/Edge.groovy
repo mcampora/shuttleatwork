@@ -2,6 +2,7 @@ package gtfs.graph
 
 import gtfs.model.*
 
+
 /**
  * An edge is a stop and for each route passing through this stop maintains a list of arcs connecting to another edge
  * Each arc is associated to a given route, trip and stoptime (a destination and departure time)
@@ -47,10 +48,6 @@ class Edge {
 		arc.addTime(trip_id, departure_time, arrival_time)
 	}
 
-	public String toString() {
-		return "Edge:${stop_id}"
-	}
-
 	def findRoute(def edges, def stop_list, def destination_id) {
 		println "${stop_list.size()}"
 		if (stop_id.equals(destination_id))
@@ -62,5 +59,17 @@ class Edge {
 			return nextedge.findRoute(edges, stop_list + this, destination_id)
 		}
 		return null
+	}
+	
+	def findArcsAndTimes(def departure_time) {
+		def res_arcs = [:]
+		r_arcs.each { route_id, arcs ->
+			res_arcs[route_id] = []
+			arcs.each { arc ->
+				def res_arc = arc.findTimes(departure_time)
+				res_arcs[route_id].add(res_arc)
+			}
+		}
+		return res_arcs
 	}
 }

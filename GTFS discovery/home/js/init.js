@@ -51,17 +51,6 @@ function loadFeed(name) {
 	getShapes();
 }
 
-//get the geographical area containing the current feed(s)
-function getArea(fn) {
-	url = "/script/getArea";
-	GDownloadUrl(url, function(obj) {
-		var area = eval('(' + obj + ')');
-		//alert(obj);
-		if (fn != null)
-			fn(area);
-	});
-}
-
 // create icons for the stops
 function initIcons() {
     iconDestination = makeStopIcon();
@@ -83,45 +72,4 @@ function makeStopIcon() {
     icon.iconAnchor = new GPoint(18, 40);
     icon.infoWindowAnchor = new GPoint(5, 1);
     return icon;
-}
-
-function getContent(url, fn) {
-	GDownloadUrl(url, function(msg) {
-		//console.log(msg);
-		var obj = eval('(' + msg + ')');
-		if (fn != null)
-			fn(obj);
-	});
-}
-
-//get the stops and their respective position
-function getStops(fn) {
-	getContent("/script/getStops", function(obj){
-		stops = obj;
-		if (fn != null) fn(stops);
-	});
-}
-
-//get the trips
-function getTrips(fn) {
-	getContent("/script/getTrips", function(obj){
-		trips = obj;
-		if (fn != null) fn(trips);
-	});
-}
-
-//get the routes
-function getRoutes(fn) {
-	getContent("/script/getRoutes", function(obj){
-		routes = obj;
-		if (fn != null) fn(routes);
-	});
-}
-
-//get the shapes
-function getShapes(fn) {
-	getContent("/script/getShapes", function(obj){
-		shapes = obj;
-		if (fn != null) fn(shapes);
-	});
 }

@@ -11,31 +11,37 @@ class ActionsTest extends GroovyTestCase {
 	}
 
 	public void testFindItinerary() {
-		//println execute("findItinerary", [origin_id: 'GREEN_SIDE', destination_id: 'MAIN_SITE'])
+		//println execute("findItinerary", [origin_id: \"GREEN_SIDE\", destination_id: \"MAIN_SITE\"])
 	}
 
 	public void testFindRoutes() {
 		def rr = execute("findRoutes", [stop_id:'GREEN_SIDE'])
 		assert rr != null
-		assert rr.startsWith("{ 'jsonid':1, 'SB':[ { 'jsonid':3, 'times':[ { 'jsonid':5, ");
+		assert rr.startsWith("{ \"SB\":[ { \"times\":[ { ");
 
 		rr = execute("findRoutes", [stop_id:'TEMPLIERS'])
 		assert rr != null
-		assert rr.startsWith("{ 'jsonid':1, 'SB':[ { 'jsonid':3, 'times':[ { 'jsonid':5, ");
+		assert rr.startsWith("{ \"SB\":[ { \"times\":[ { ");
 
 		rr = execute("findRoutes", [stop_id:'NAXOS'])
 		assert rr != null
-		assert rr.startsWith("{ 'jsonid':1, 'SA':[ { 'jsonid':3, 'times':[ { 'jsonid':5, ");
+		assert rr.startsWith("{ \"SA\":[ { \"times\":[ { ");
+	}
+
+	public void testFindRoutesAndNextDepartures() {
+		def rr = execute("findRoutesAndNextDepartures", [stop_id:'GREEN_SIDE'])
+		assert rr != null
+		assert rr.startsWith("{ \"SB\":[ { \"times\":[ ");
 	}
 
 	public void testGetArea() {
 		assertEquals execute("getArea", null),
-			"{ 'jsonid':1, 'max':{ 'jsonid':2, 'lat':43.626399, 'lon':7.074561,  }, 'min':{ 'jsonid':3, 'lat':43.616287, 'lon':7.041944,  },  }"
+			"{ \"max\":{ \"lat\":43.626399, \"lon\":7.074561 }, \"min\":{ \"lat\":43.616287, \"lon\":7.041944 } }"
 	}
 
 	public void testGetStops() {
 		assert execute("getStops", null).startsWith(
-			"{ 'jsonid':1, 'GREEN_SIDE':{ 'jsonid':2, 'stop_id':'GREEN_SIDE'");
+			"{ \"GREEN_SIDE\":{ \"stop_id\":\"GREEN_SIDE\"");
 	}
 
 	public void testHelloWorld() {

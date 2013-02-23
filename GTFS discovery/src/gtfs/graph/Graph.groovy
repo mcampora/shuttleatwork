@@ -41,8 +41,8 @@ class Graph {
 		return edges[start].r_arcs
 	}
 
-	def findRoutes(def start, def time) {
-		return [:]
+	def findRoutesAndTimes(def start, def departure_time) {
+		return edges[start].findArcsAndTimes(departure_time)
 	}
 
 	def findRoute(def start, def end) {

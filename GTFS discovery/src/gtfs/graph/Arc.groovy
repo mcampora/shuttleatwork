@@ -4,7 +4,8 @@ import gtfs.model.*
 
 /**
  * One arc is connecting an edge with another one
- * and is associated to a given route and trip
+ * and is associated to a given route, trip
+ * a list of departure time is associated to the arc
  */
 class Arc {
 	def route_id;
@@ -19,15 +20,20 @@ class Arc {
 		this.destination_id = destination_id
 	}
 	
-	def addTime(String trip_id, String departure_time, String arrival_time) {
-		Time t = new Time()
-		t.trip_id = trip_id
-		t.departure_time = departure_time
-		t.arrival_time = arrival_time
+	void addTime(String trip_id, String departure_time, String arrival_time) {
+		Time t = new Time(trip_id, departure_time, arrival_time)
 		times.add(t)
+		times.sort { it.departure }
 	}
 	
-	public String toString() {
-		return "Arc:${origin_id}->${destination_id}"
+	Arc findTimes(def departure_time) {
+		Arc arc = new Arc(route_id, origin_id, destination_id)
+		times.each { time ->
+			//println "$route_id $time.departure"
+			if (time.after(departure_time)) {
+				arc.times.add(time)
+			}
+		}
+		return arc
 	}
 }

@@ -1,6 +1,6 @@
 package shuttletowork.actions
 
 def res = Facade.getInstance().feed.getNetworks()
-def sres = JSon.transform(res)
+def sres = JSon2.transform(res)
 //println sres
 return sres

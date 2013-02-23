@@ -113,25 +113,3 @@ function onStopSelect(marker) {
 		});
 	}
 }
-
-function findItinerary(oid, did, fn) {
-	console.log('findItinerary');
-	url = "/script/findItinerary?origin_id=" + oid + "&destination_id=" + did;
-	GDownloadUrl(url, function(obj) {
-		alert(obj);
-		var data = eval('(' + obj + ')');
-		if (fn != null)
-			fn(data);
-	});
-}
-
-function findRoutes(id, fn) {
-	console.log('findRoutes');
-	url = "/script/findRoutes?stop_id=" + id;
-	GDownloadUrl(url, function(obj) {
-		var data = eval('(' + obj + ')');
-		if (fn != null)
-			fn(data);
-	});
-}
-

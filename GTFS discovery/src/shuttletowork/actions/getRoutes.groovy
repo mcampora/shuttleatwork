@@ -9,6 +9,6 @@ import shuttletowork.model.*
  */
 
 def res = Facade.getInstance().feed.getRoutes()
-def sres = JSon.transform(res)
+def sres = JSon2.transform(res)
 //println sres
 return sres
