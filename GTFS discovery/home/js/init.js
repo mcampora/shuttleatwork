@@ -78,4 +78,5 @@ function initSettingsPanel() {
 	//$("#nw")[0].innerText = "GTFS Viewer: " + name;
 	var name = "1Ashuttle";
 	$("select#activenw").html = "<option value='" + name + "'>" + name + "</option>";
+	$('select#activenw').selectmenu('refresh');
 }
