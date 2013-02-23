@@ -20,6 +20,7 @@ function load() {
 		map.enableScrollWheelZoom();
 		map.enableDoubleClickZoom();
 		loadFeed("1Ashuttle");
+		initSettingsPanel();
 	}
 }
 
@@ -38,8 +39,6 @@ function loadFeed(name) {
 
 	// create bus stops icons
 	initIcons();
-
-	$("#nw")[0].innerText = "GTFS Viewer: " + name;
 
 	// load bus stops and plot them on the map (pretend the map moved)
 	// add them also to the list in the sidebar
@@ -72,4 +71,11 @@ function makeStopIcon() {
     icon.iconAnchor = new GPoint(18, 40);
     icon.infoWindowAnchor = new GPoint(5, 1);
     return icon;
+}
+
+// initialiwe the settings page
+function initSettingsPanel() {
+	//$("#nw")[0].innerText = "GTFS Viewer: " + name;
+	var name = "1Ashuttle";
+	$("select#activenw").html = "<option value='" + name + "'>" + name + "</option>";
 }

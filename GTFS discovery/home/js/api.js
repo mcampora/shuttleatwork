@@ -54,7 +54,7 @@ function findRoutes(id, fn) {
 // find the routes starting from a given destination
 // and the next departures considering current time
 function findRoutesAndNextDepartures(id, fn) {
-	url = "/script/findRoutes?stop_id=" + id;
+	url = "/script/findRoutesAndNextDepartures?stop_id=" + id;
 	$.getJSON(url, function(obj){
 		if (fn != null)	fn(obj);
 	});

@@ -68,6 +68,9 @@ function displayDetails(marker, info) {
 	    			shape.color = route.route_color;
 	    			hshapes[trip.shape_id] = shape;
 	    		}
+	    		if (j==0) {
+	    			html = html + "<li><i>No more departures today</i></li>";
+	    		}
 	    		html = html + "</ul>";
     		}
     		html = html + "</ul>";
@@ -107,7 +110,8 @@ function onStopSelect(marker) {
 	// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
 	else {
 		origin = marker.stop;
-		findRoutes(origin.stop_id, function(data) {
+		//findRoutes(origin.stop_id, function(data) {
+		findRoutesAndNextDepartures(origin.stop_id, function(data) {
 			info = data;
 			refreshMap();
 		});

@@ -46,31 +46,59 @@
 				<h3>Settings</h3>
 			</div>
 			<div data-role="content">
-				<form id="settings" action="" method="get">
-							<p>This page allows you to load another GTFS network.</p>
-							<div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
-								<label for="select-network" class="select ui-select">Choose from the current collection:</label>
-								<select name="select-network" id="select-choice-a" data-native-menu="false" tabindex="-1">
-									<option data-placeholder="true">GTFS networks</option>
-									<option value="a">A</option>
-									<option value="b">B</option>
-									<option value="c">C</option>
-									<option value="d">D</option>
-								</select>
-							</div>
-							<fieldset class="ui-grid-a">
-									<div class="ui-block-a">
-										<a href="#home" data-role="button" data-theme="d">Cancel</a>
-									</div>
-									<div class="ui-block-b">
-										<a onclick="loadFeed()" data-role="button" data-theme="d">Test</a>
-									</div>
-									<div class="ui-block-b">
-										<button type="submit" data-theme="a">Submit</button>
-									</div>
-							</fieldset>
-			</form>
-			</div>
+		        <div data-role="fieldcontain" id="activenw">
+		            <label for="activenw">
+		                Active network:
+		            </label>
+		            <select id="activenw" name="activenw" data-theme="a">
+		                <option value="val1">
+		                    Option 1
+		                </option>
+		                <option value="val2">
+		                    Option 2
+		                </option>
+		            </select>
+		        </div>
+		        <div data-role="fieldcontain" id="checknext">
+		            <fieldset data-role="controlgroup">
+		                <label for="checknext">
+		                    Check next departures:
+		                </label>
+		                <select name="checknext" id="checknext" data-theme="a" data-role="slider">
+		                    <option value="off">
+		                        Off
+		                    </option>
+		                    <option value="on">
+		                        On
+		                    </option>
+		                </select>
+		            </fieldset>
+		        </div>
+		        <div data-role="fieldcontain" id="closest">
+		            <fieldset data-role="controlgroup">
+		                <label for="closest">
+		                    Select closest stop:
+		                </label>
+		                <select name="closest" id="closest" data-theme="a" data-role="slider">
+		                    <option value="off">
+		                        Off
+		                    </option>
+		                    <option value="on">
+		                        On
+		                    </option>
+		                </select>
+		            </fieldset>
+		        </div>
+				<div id="nav" data-role="footer" data-id="nav" data-position="fixed">
+					<div data-role="navbar">
+						<ul>
+							<li><a href="#home" data-icon="home">Map</a></li>
+							<li><a href="#settings" data-icon="gear" class="ui-btn-active ui-state-persist">Settings</a></li>
+							<li><a href="#info" data-icon="info">Info</a></li>
+						</ul>
+					</div>
+				</div>
+       		</div>
 		</div>
 
 		<!-- about page
