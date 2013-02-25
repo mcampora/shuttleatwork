@@ -73,10 +73,28 @@ function makeStopIcon() {
     return icon;
 }
 
+var name 	= "1Ashuttle";
+var closest = false;
+var checknext 	= true;
+	
 // initialiwe the settings page
 function initSettingsPanel() {
-	//$("#nw")[0].innerText = "GTFS Viewer: " + name;
-	var name = "1Ashuttle";
-	$("select#activenw").html = "<option value='" + name + "'>" + name + "</option>";
-	$('select#activenw').selectmenu('refresh');
+	$("select#activenw").empty();
+	$("select#activenw").append("<option value='" + name + "'>" + name + "</option>");
+	
+	//if (closest)
+	//	$( "select#closest>option[value='true']" ).attr("selected", "true");
+	//$( "select#closest" ).slider({
+  	//	stop: function( event, ui ) {
+  	//		closest = !closest;
+  	//	}
+	//});
+
+	if (checknext)
+		$( "select#checknext>option[value='true']" ).attr("selected", "true");
+	$( "select#checknext" ).slider({
+  		stop: function( event, ui ) {
+  			checknext = !checknext;
+  		}
+	});
 }

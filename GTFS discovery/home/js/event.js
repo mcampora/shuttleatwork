@@ -110,8 +110,10 @@ function onStopSelect(marker) {
 	// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
 	else {
 		origin = marker.stop;
-		//findRoutes(origin.stop_id, function(data) {
-		findRoutesAndNextDepartures(origin.stop_id, function(data) {
+		var fn = findRoutes;
+		if (checknext)
+			fn = findRoutesAndNextDepartures;
+		fn(origin.stop_id, function(data) {
 			info = data;
 			refreshMap();
 		});
