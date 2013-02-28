@@ -8,11 +8,11 @@ The application is designed to run on a mobile browser.
 
 Technical environment
 ---------------------
-Server side application is developed in Groovy (1.8)
-Client side relies on JQuery mobile (1.1.1) and the Google Map API (v2)
+Server side application is developed in Groovy
+Client side relies on JQuery mobile and the Google Map API
 
 Come as an Eclipse project.
-Probably work with different versions however I'm using Eclipse 3.6 and Groovy features 2.7.0 on Mac OS. 
+Probably work with different versions however I'm using Eclipse Juno and Groovy features on Mac OS. 
 
 Does not need any Web container, launch MiniServer.groovy a basic HTTP server. The root folder containing client files is [project]/home. 
 
