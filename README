@@ -4,16 +4,16 @@ GTFS prototype.
 
 The objective is to build an easy to use Web application one can use to find the next shuttle departure.
 
-The application is designed to run on a mobile browser.
+The application is designed to be deployed on Google App Engine and run in a mobile browser (ie. tablet or smartphone).
 
 Technical environment
 ---------------------
-Server side application is developed in Groovy
-Client side relies on JQuery mobile and the Google Map API
+The server side application is developed in Groovy
+The client side relies on JQuery mobile and the Google Map API
 
 Come as an Eclipse project.
-Probably work with different versions however I'm using Eclipse Juno and Groovy features on Mac OS. 
+Probably work with different versions however I'm using Eclipse Juno, Groovy and Google App Engine features on Mac OS. 
 
-Does not need any Web container, launch MiniServer.groovy a basic HTTP server. The root folder containing client files is [project]/home. 
+GTFS files are stored under [project]/src/rsc. Current files capture my company shuttle, routes and schedules connecting the various buildings.
 
-GTFS files are stored under [project]/rsc. Current files capture my company shuttle, routes and schedules connecting the various buildings.
+Check the associated Wiki for more details.
