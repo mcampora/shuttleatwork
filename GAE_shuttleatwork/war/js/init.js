@@ -10,6 +10,13 @@ var name;
 
 // Initialize the map, zoom to fit with the selected feed(s), plot the stops
 function load() {
+    $.mobile.loading( 'show', {
+    	text: "loading the network...",
+    	textVisible: true,
+    	theme: "a",
+    	textonly: false
+  	});
+  
 	if (GBrowserIsCompatible()) {
 		// create the map widget
 		var map_dom = $("#map")[0];
@@ -45,9 +52,13 @@ function loadFeed(name) {
 	getStops(refreshMap);
 
 	// load also routes and trips
-	getTrips();
-	getRoutes();
-	getShapes();
+	getTrips(
+		getRoutes(
+			getShapes(
+				function() { $.mobile.loading( "hide" ); }
+			)
+		)
+	);
 }
 
 // create icons for the stops
