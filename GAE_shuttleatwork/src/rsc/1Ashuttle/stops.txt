@@ -1,0 +1,7 @@
+stop_id,stop_name,stop_desc,stop_lat,stop_lon,zone_id,stop_url
+GREEN_SIDE,Green Side,,43.622990,7.071406,,
+TEMPLIERS,Les Templiers (HP),,43.616287,7.074561,,
+MAIN_SITE,Main site,,43.622998,7.061976,,
+TAISSOUNIERES,Les Taissounieres,,43.624908,7.045378,,
+CLARA,Clara,,43.626399,7.052674,,
+NAXOS,Naxos,,43.626289,7.041944,,

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+    	<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+
+		<script type="text/javascript" src="http://maps.google.com/maps?file=api&v=2&key=AIzaSyAZTTRO6RC6LQyKCD3JODhxbClsZl95P9U"></script>
+
+		<link rel="stylesheet" href="/style.css" />
+				
+		<script type="text/javascript" src="/js/api.js"></script>
+		<script type="text/javascript" src="/js/init.js"></script>
+		<script type="text/javascript" src="/js/event.js"></script>
+	</head>
+
+	<body class='sidebar-left' onload="load();" onunload="GUnload()">
+
+		<!-- main page, with an interactive map highliting stops in the selected network 
+		-->
+		<div data-role="page" id="home" data-title="GTFS viewer" data-theme="a">
+			<div data-role="header" data-position="fixed">
+				<h3><div id='nw'>GTFS viewer: </div></h3>
+			</div>
+			<div data-role="content" class="content">
+				<div id="map" class="map"></div>
+			</div>
+			<div id="nav" data-role="footer" data-id="nav" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#home" data-icon="home" class="ui-btn-active ui-state-persist">Map</a></li>
+						<li><a href="#settings" data-icon="gear">Settings</a></li>
+						<li><a href="#info" data-icon="info">Info</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- setup page, allows to select or import a network
+		-->
+		<div data-role="page" id="settings" data-title="Settings" data-theme="a">
+			<div data-role="header" data-position="fixed">
+				<h3>Settings</h3>
+			</div>
+			<div data-role="content">
+		        <div data-role="fieldcontain" id="activenw">
+		            <label for="activenw">
+		                Active network:
+		            </label>
+		            <select id="activenw" name="activenw" data-theme="a">
+		                <option value="val1">
+		                    Option 1
+		                </option>
+		                <option value="val2">
+		                    Option 2
+		                </option>
+		            </select>
+		        </div>
+		        <div data-role="fieldcontain" id="checknext">
+		            <fieldset data-role="controlgroup">
+		                <label for="checknext">
+		                    Check next departures:
+		                </label>
+		                <select name="checknext" id="checknext" data-theme="a" data-role="slider">
+		                    <option value="false">
+		                        Off
+		                    </option>
+		                    <option value="true">
+		                        On
+		                    </option>
+		                </select>
+		            </fieldset>
+		        </div>
+		        <div data-role="fieldcontain" id="closest">
+		            <fieldset data-role="controlgroup">
+		                <label for="closest">
+		                    Select closest stop:
+		                </label>
+		                <select name="closest" id="closest" data-theme="a" data-role="slider" disabled="disabled">
+		                    <option value="false">
+		                        Off
+		                    </option>
+		                    <option value="true">
+		                        On
+		                    </option>
+		                </select>
+		            </fieldset>
+		        </div>
+				<div id="nav" data-role="footer" data-id="nav" data-position="fixed">
+					<div data-role="navbar">
+						<ul>
+							<li><a href="#home" data-icon="home">Map</a></li>
+							<li><a href="#settings" data-icon="gear" class="ui-btn-active ui-state-persist">Settings</a></li>
+							<li><a href="#info" data-icon="info">Info</a></li>
+						</ul>
+					</div>
+				</div>
+       		</div>
+		</div>
+
+		<!-- about page
+		-->
+		<div data-role="page" id="info" data-title="Info" data-theme="a">
+			<div data-role="header" data-position="fixed">
+				<h3>Info</h3>
+			</div>
+			<div data-role="content">
+				Info...
+			</div>
+			<div id="nav" data-role="footer" data-id="nav" data-position="fixed">
+				<div data-role="navbar">
+					<ul>
+						<li><a href="#home" data-icon="home">Map</a></li>
+						<li><a href="#settings" data-icon="gear">Settings</a></li>
+						<li><a href="#info" data-icon="info" class="ui-btn-active ui-state-persist">Info</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
