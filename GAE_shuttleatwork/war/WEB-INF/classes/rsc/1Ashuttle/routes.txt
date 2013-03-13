@@ -1,3 +1,4 @@
 route_id,agency_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
 SA,1A-SEP,SA,Amadeus Shuttle - Naxos,,3,,0000FF,FFFFFF
-SB,1A-SEP,SB,Amadeus Shuttle - Greenside,,3,,ED7F10,FFFFFF
+SB,1A-SEP,SB,Amadeus Shuttle - Greenside 15,,3,,ED7F10,FFFFFF
+SC,1A-SEP,SC,Amadeus Shuttle - Greenside 5,,3,,E50083,FFFFFF

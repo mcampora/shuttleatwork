@@ -1,33 +1,45 @@
 route_id,service_id,trip_id,trip_headsign,direction_id,block_id,shape_id
-SA,WEEK,SAup01,To Main,0,1,SA1
-SA,WEEK,SAup02,To Main,0,1,SA1
-SA,WEEK,SAup03,To Main,0,1,SA1
-SA,WEEK,SAup04,To Main,0,1,SA1
-SA,WEEK,SAup05,To Main,0,1,SA1
-SA,WEEK,SAup06,To Main,0,1,SA1
-SA,WEEK,SAup07,To Main,0,1,SA1
-SA,WEEK,SAup08,To Main,0,1,SA1
-SA,WEEK,SAdown01,To Naxos,1,2,SA2
-SA,WEEK,SAdown02,To Naxos,1,2,SA2
-SA,WEEK,SAdown03,To Naxos,1,2,SA2
-SA,WEEK,SAdown04,To Naxos,1,2,SA2
-SA,WEEK,SAdown05,To Naxos,1,2,SA2
-SA,WEEK,SAdown06,To Naxos,1,2,SA2
-SA,WEEK,SAdown07,To Naxos,1,2,SA2
-SA,WEEK,SAdown08,To Naxos,1,2,SA2
-SB,WEEK,SBup01,To Main,0,3,SB1
-SB,WEEK,SBup02,To Main,0,3,SB1
-SB,WEEK,SBup03,To Main,0,3,SB1
-SB,WEEK,SBup04,To Main,0,3,SB1
-SB,WEEK,SBup05,To Main,0,3,SB1
-SB,WEEK,SBup06,To Main,0,3,SB1
-SB,WEEK,SBup07,To Main,0,3,SB1
-SB,WEEK,SBup08,To Main,0,3,SB1
-SB,WEEK,SBdown01,To Greenside,1,4,SB2
-SB,WEEK,SBdown02,To Greenside,1,4,SB2
-SB,WEEK,SBdown03,To Greenside,1,4,SB2
-SB,WEEK,SBdown04,To Greenside,1,4,SB2
-SB,WEEK,SBdown05,To Greenside,1,4,SB2
-SB,WEEK,SBdown06,To Greenside,1,4,SB2
-SB,WEEK,SBdown07,To Greenside,1,4,SB2
-SB,WEEK,SBdown08,To Greenside,1,4,SB2
+SA,WEEK,SAup01,To Main,0,1,SA1x
+SA,WEEK,SAup02,To Main,0,1,SA1x
+SA,WEEK,SAup03,To Main,0,1,SA1x
+SA,WEEK,SAup04,To Main,0,1,SA1x
+SA,WEEK,SAup05,To Main,0,1,SA1x
+SA,WEEK,SAup06,To Main,0,1,SA1x
+SA,WEEK,SAup07,To Main,0,1,SA1x
+SA,WEEK,SAdown01,To Naxos,1,2,SA2x
+SA,WEEK,SAdown02,To Naxos,1,2,SA2x
+SA,WEEK,SAdown03,To Naxos,1,2,SA2x
+SA,WEEK,SAdown04,To Naxos,1,2,SA2x
+SA,WEEK,SAdown05,To Naxos,1,2,SA2x
+SA,WEEK,SAdown06,To Naxos,1,2,SA2x
+SA,WEEK,SAdown07,To Naxos,1,2,SA2x
+SB,WEEK,SBup01,To Main,0,3,SB1x
+SB,WEEK,SBup02,To Main,0,3,SB1x
+SB,WEEK,SBup03,To Main,0,3,SB1x
+SB,WEEK,SBup04,To Main,0,3,SB1x
+SB,WEEK,SBup05,To Main,0,3,SB1x
+SB,WEEK,SBup06,To Main,0,3,SB1x
+SB,WEEK,SBup07,To Main,0,3,SB1x
+SB,WEEK,SBup08,To Main,0,3,SB1x
+SB,WEEK,SBdown01,To Greenside 15,1,4,SB2x
+SB,WEEK,SBdown02,To Greenside 15,1,4,SB2x
+SB,WEEK,SBdown03,To Greenside 15,1,4,SB2x
+SB,WEEK,SBdown04,To Greenside 15,1,4,SB2x
+SB,WEEK,SBdown05,To Greenside 15,1,4,SB2x
+SB,WEEK,SBdown06,To Greenside 15,1,4,SB2x
+SB,WEEK,SBdown07,To Greenside 15,1,4,SB2x
+SB,WEEK,SBdown08,To Greenside 15,1,4,SB2x
+SC,WEEK,SCup01,To Main,0,5,SC1x
+SC,WEEK,SCup02,To Main,0,5,SC1x
+SC,WEEK,SCup03,To Main,0,5,SC1x
+SC,WEEK,SCup04,To Main,0,5,SC1x
+SC,WEEK,SCup05,To Main,0,5,SC1x
+SC,WEEK,SCup06,To Main,0,5,SC1x
+SC,WEEK,SCup07,To Main,0,5,SC1x
+SC,WEEK,SCdown01,To Greenside 5,1,6,SC2x
+SC,WEEK,SCdown02,To Greenside 5,1,6,SC2x
+SC,WEEK,SCdown03,To Greenside 5,1,6,SC2x
+SC,WEEK,SCdown04,To Greenside 5,1,6,SC2x
+SC,WEEK,SCdown05,To Greenside 5,1,6,SC2x
+SC,WEEK,SCdown06,To Greenside 5,1,6,SC2x
+SC,WEEK,SCdown07,To Greenside 5,1,6,SC2x

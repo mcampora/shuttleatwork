@@ -65,7 +65,8 @@ function displayDetails(marker, info) {
 	    			var trip = trips[arcs[i].times[j].trip_id]
     				html = html + "<li>" + trip.trip_headsign + " - " + arcs[i].times[j].departure_time + "</li>";
 	    			var shape = shapes[trip.shape_id];
-	    			shape.color = route.route_color;
+	    			if (shape != null)
+	    				shape.color = route.route_color;
 	    			hshapes[trip.shape_id] = shape;
 	    		}
 	    		if (j==0) {
@@ -86,15 +87,17 @@ function displayShapes(hshapes) {
 	console.log('displayShapes');
 	for (var nshape in hshapes) {
 		var shape = hshapes[nshape];
-		//console.log(shape);
-		var linePoints = Array();
-		for (var i = 0; i < shape.shape_pts.length; i++) {
-			var ll = new GLatLng(shape.shape_pts[i].pos.lat, shape.shape_pts[i].pos.lon);
-			linePoints[linePoints.length] = ll;
+		if (shape != null) {
+			//console.log(shape);
+			var linePoints = Array();
+			for (var i = 0; i < shape.shape_pts.length; i++) {
+				var ll = new GLatLng(shape.shape_pts[i].pos.lat, shape.shape_pts[i].pos.lon);
+				linePoints[linePoints.length] = ll;
+			}
+			var color = shape.color;
+			var polyline = new GPolyline(linePoints, color, 4);
+			map.addOverlay(polyline);
 		}
-		var color = shape.color;
-		var polyline = new GPolyline(linePoints, color, 4);
-		map.addOverlay(polyline);
   	}
 }
 
