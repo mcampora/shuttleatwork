@@ -1,2 +1,0 @@
-agency_id,agency_name,agency_url,agency_timezone
-1A-SEP,Amadeus Corporation (SEP contribution),https://www.amadeus.com,Europe/Paris
