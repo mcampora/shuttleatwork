@@ -19,114 +19,177 @@
       body { height: 100%; margin: 0; padding: 0 }
       #map-canvas { height: 100% }
     </style>
-    
+
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1NHvlawmhqWYB6yEgIpkLGSUGYER-v8M&sensor=false"></script>
 
     <script type="text/javascript">
-	var origin  = null; // keep track of the user selection
-	var checknext = false;
-	function onStopSelect(marker) {
-		console.log('onStopSelect');
-		// if origin selected and the marker is the origin then clear selection, no more details or shapes
-		if (origin == marker.stop) {
-			origin = null;
-			info = null;
-			//refreshMap();
-		}
-		// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
-		else {
-			origin = marker.stop;
-			var fn = findRoutes;
-			if (checknext)
-				fn = findRoutesAndNextDepartures;
-			fn(origin.stop_id, function(data) {
-				info = data;
-				//refreshMap();
-			});
-		}
-	}
-	function setMarkers(map, stops) {
-		console.log('setMarkers');
-        var normal = {
-          url: "/icons/bus.png",
-          size: new google.maps.Size(36, 40),
-          origin: new google.maps.Point(0,0), //36,0),
-          anchor: new google.maps.Point(0,0) //18, 40)
-        };
-        var selected = {
-          url: "/icons/green_bus.png",
-          size: new google.maps.Size(36, 40),
-          origin: new google.maps.Point(0,0), //36,0),
-          anchor: new google.maps.Point(0,0) //18, 40)
-        };
-		for (var stop_id in stops) {
-			if (stop_id != "jsonid") {
-				var stop = stops[stop_id];	
-			    var image = normal;
-			    if (stop == origin) {
-			    	image = selected;
+      var normal = {
+      	url : "/icons/bus.png",
+      	size : new google.maps.Size(36, 40),
+      	origin : new google.maps.Point(0, 0), //36,0),
+      	anchor : new google.maps.Point(0, 0) //18, 40)
+      };
+      var selected = {
+      	url : "/icons/green_bus.png",
+      	size : new google.maps.Size(36, 40),
+      	origin : new google.maps.Point(0, 0), //36,0),
+      	anchor : new google.maps.Point(0, 0) //18, 40)
+      };
+  		var origin = null; // keep track of the user selection
+  		var checknext = false;
+			var info = null;
+			var infowindow = null;
+
+			// called when a stop is selected
+			function displayDetails(marker, info) {
+				console.log('displayDetails');
+
+			  var hshapes = [];
+				var html = "<div class='stopinfo'>";
+
+			  // name of the stop
+				html = html + "<p class='stopname'>" + marker.stop.stop_name + "</p>";
+
+			  for (var route_id in info) {
+			  	if (route_id != "jsonid") {
+			   		var route = routes[route_id];
+
+			   		// name of the route
+			   		html = html + "<span class='route' style='background-color:#" + route.route_color +
+			   			";color:#" + route.route_text_color + ";'>" +
+			   			route.route_long_name +
+			   			" (" + route.route_short_name +	")</span>";
+
+			   		html = html + "<ul class='tostop'>";
+			   		var arcs = info[route_id];
+			   		for (var i=0,len=arcs.length; i<len; i++) {
+			   			var arc = arcs[i];
+			   			var destination = stops[arc.destination_id];
+
+			   			// name of the next stop
+			   			html = html + "<li>" + destination.stop_name + "</li>";
+		    			html = html + "<ul class='departuretime'>";
+			    		for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
+			    			var trip = trips[arcs[i].times[j].trip_id]
+		    				html = html + "<li>" + trip.trip_headsign + " - " + arcs[i].times[j].departure_time + "</li>";
+			    			var shape = shapes[trip.shape_id];
+			    			if (shape != null)
+			    				shape.color = route.route_color;
+				    			hshapes[trip.shape_id] = shape;
+				    		}
+				    		if (j==0) {
+				    			html = html + "<li><i>No more departures today</i></li>";
+				    		}
+				    		html = html + "</ul>";
+			    		}
+			    		html = html + "</ul>";
+			    	}
 			    }
-				var myLatLng = new google.maps.LatLng(stop.pos.lat, stop.pos.lon);
-				var marker = new google.maps.Marker({
-					position: myLatLng,
-					map: map,
-					icon: image,
-					title: stop.stop_name
+			    html = html + "</div></div>";
+			    //displayShapes(hshapes);
+					infowindow = new google.maps.InfoWindow({
+						content: html
+					});
+					infowindow.open(marker.get('map'), marker);
+			}
+
+  		function onStopSelect(marker) {
+  			console.log('onStopSelect');
+				if (infowindow != null) {
+					infowindow.close();
+				}
+  			if (origin != null) {
+  				origin.marker.setIcon(normal);
+  			}
+  			// if origin selected and the marker is the origin then clear selection, no more details or shapes
+  			if (origin == marker.stop) {
+  				origin = null;
+  				info = null;
+  			}
+  			// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
+  			else {
+  				origin = marker.stop;
+  				origin.marker.setIcon(selected);
+  				var fn = findRoutes;
+  				if (checknext)
+  					fn = findRoutesAndNextDepartures;
+  				fn(origin.stop_id, function(data) {
+  					info = data;
+ 		  			displayDetails(marker, info);
+  				});
+  			}
+  		}
+
+  		function addMarkerEvent(marker) {
+  			google.maps.event.addListener(marker, 'click',
+  					function() {
+  						onStopSelect(marker);
+  					});
+  		}
+
+			function setMarkers(map, stops) {
+				console.log('setMarkers');
+				for (var stop_id in stops) {
+					if (stop_id != "jsonid") {
+						var stop = stops[stop_id];
+						var myLatLng = new google.maps.LatLng(
+								stop.pos.lat, stop.pos.lon);
+						var marker = new google.maps.Marker({
+							position : myLatLng,
+							map : map,
+							icon : normal,
+							title : stop.stop_name
+						});
+						marker.stop = stop;
+						stop.marker = marker;
+						addMarkerEvent(marker);
+					}
+				}
+			}
+
+			function initialize() {
+				console.log('initialize');
+				// activate the spiner
+				$.mobile.loading('show', {
+					text : "loading the network...",
+					textVisible : true,
+					theme : "a",
+					textonly : false
 				});
-    			marker.stop = stop;
-    			stop.marker = marker;
-    			//marker.clickListener = GEvent.addListener(marker, "click", function() {onStopSelect(marker);});
-    			google.maps.event.addListener(marker, 'click', function() {onStopSelect(marker);});
-        	}
-      	}
-    }
-	function initialize() {
-		console.log('initialize');
-		// activate the spiner
-	    $.mobile.loading( 'show', {
-	    	text: "loading the network...",
-	    	textVisible: true,
-	    	theme: "a",
-	    	textonly: false
-	  	});
-		  	
-	  	// initiate the map
-	    var mapOptions = {
-	      center: new google.maps.LatLng(-34.397, 150.644),
-	      zoom: 8,
-	      mapTypeId: google.maps.MapTypeId.TERRAIN
-	    };
-	    map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-		
-		// retrieve the feed area and resize the map
-		getArea(function(area) {
-			map.fitBounds(
-				new google.maps.LatLngBounds(
-					new google.maps.LatLng(area.min.lat, area.min.lon),   // sw
-					new google.maps.LatLng(area.max.lat, area.max.lon))); // ne
-	
-			// load bus stops and plot them on the map
-			getStops(function(stops) {
-				setMarkers(map, stops);
-		
-				// set callbacks
-				//GEvent.addListener(map, "moveend", refreshMap);
-				
-				// load also routes and trips
-				//getTrips(
-					//getRoutes(
-						//getShapes(
-							//function() { 
-								// remove the spinner
-								$.mobile.loading( "hide" ); 
-							//}
-						//)
-					//)
-				//);
-			});
-		});
-	}
-    </script>
+
+				// initiate the map
+				var mapOptions = {
+					center : new google.maps.LatLng(-34.397, 150.644),
+					zoom : 8,
+					mapTypeId : google.maps.MapTypeId.ROADMAP
+				};
+				map = new google.maps.Map(document
+						.getElementById('map-canvas'), mapOptions);
+
+				// retrieve the feed area and resize the map
+				getArea(function(area) {
+					map.fitBounds(new google.maps.LatLngBounds(
+							new google.maps.LatLng(area.min.lat,
+									area.min.lon), // sw
+							new google.maps.LatLng(area.max.lat,
+									area.max.lon))); // ne
+
+					// load bus stops and plot them on the map
+					getStops(function(stops) {
+						setMarkers(map, stops);
+						// load also routes and trips
+						getRoutes(function(routes) {
+  						getTrips(function(trips) {
+    						getShapes(function(shapes) {
+      						// remove the spinner
+      						$.mobile.loading("hide");
+    						});
+  						});
+						});
+					});
+				});
+			}
+		</script>
 
 </head>
 <body onload="initialize()">
