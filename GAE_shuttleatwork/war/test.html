@@ -24,7 +24,29 @@
 
     <script type="text/javascript">
 	var origin  = null; // keep track of the user selection
+	var checknext = false;
+	function onStopSelect(marker) {
+		console.log('onStopSelect');
+		// if origin selected and the marker is the origin then clear selection, no more details or shapes
+		if (origin == marker.stop) {
+			origin = null;
+			info = null;
+			//refreshMap();
+		}
+		// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
+		else {
+			origin = marker.stop;
+			var fn = findRoutes;
+			if (checknext)
+				fn = findRoutesAndNextDepartures;
+			fn(origin.stop_id, function(data) {
+				info = data;
+				//refreshMap();
+			});
+		}
+	}
 	function setMarkers(map, stops) {
+		console.log('setMarkers');
         var normal = {
           url: "/icons/bus.png",
           size: new google.maps.Size(36, 40),
@@ -51,11 +73,15 @@
 					icon: image,
 					title: stop.stop_name
 				});
+    			marker.stop = stop;
+    			stop.marker = marker;
+    			//marker.clickListener = GEvent.addListener(marker, "click", function() {onStopSelect(marker);});
+    			google.maps.event.addListener(marker, 'click', function() {onStopSelect(marker);});
         	}
       	}
     }
-      
 	function initialize() {
+		console.log('initialize');
 		// activate the spiner
 	    $.mobile.loading( 'show', {
 	    	text: "loading the network...",
@@ -100,7 +126,6 @@
 			});
 		});
 	}
-	//google.maps.event.addDomListener(window, 'load', initialize);
     </script>
 
 </head>
