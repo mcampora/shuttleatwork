@@ -8,196 +8,26 @@
 	<script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
 
+  	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1NHvlawmhqWYB6yEgIpkLGSUGYER-v8M&sensor=false"></script>
+
 	<script type="text/javascript" src="/jscript/api.js"></script>
-	<!--script type="text/javascript" src="/js/init.js"></script-->
+	<script type="text/javascript" src="/jscript/mapview.js"></script>
 	<!--script type="text/javascript" src="/js/event.js"></script-->
 
 	<link rel="stylesheet" href="/style.css"></link>
-
-  <style type="text/css">
-    html { height: 100% }
-    body { height: 100%; margin: 0; padding: 0 }
-    #map-canvas { height: 100% }
-  </style>
-
-  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1NHvlawmhqWYB6yEgIpkLGSUGYER-v8M&sensor=false"></script>
-
-  <script type="text/javascript">
-    var normal = {
-    	url : "/icons/bus.png",
-    	size : new google.maps.Size(36, 40),
-    	anchor : new google.maps.Point(18, 40)
-    };
-    var selected = {
-    	url : "/icons/green_bus.png",
-    	size : new google.maps.Size(36, 40),
-    	anchor : new google.maps.Point(18, 40)
-    };
-		var origin = null; // keep track of the user selection
-		var checknext = false;
-		var info = null;
-		var infowindow = null;
-
-		// called when a stop is selected
-		function displayDetails(marker, info) {
-			console.log('displayDetails');
-
-		  var hshapes = [];
-			var html = "<div class='stopinfo'>";
-
-		  // name of the stop
-			html = html + "<p class='stopname'>" + marker.stop.stop_name + "</p>";
-
-		  for (var route_id in info) {
-		  	if (route_id != "jsonid") {
-		   		var route = routes[route_id];
-
-		   		// name of the route
-		   		html = html + "<span class='route' style='background-color:#" + route.route_color +
-		   			";color:#" + route.route_text_color + ";'>" +
-		   			route.route_long_name +
-		   			" (" + route.route_short_name +	")</span>";
-
-		   		html = html + "<ul class='tostop'>";
-		   		var arcs = info[route_id];
-		   		for (var i=0,len=arcs.length; i<len; i++) {
-		   			var arc = arcs[i];
-		   			var destination = stops[arc.destination_id];
-
-		   			// name of the next stop
-		   			html = html + "<li>" + destination.stop_name + "</li>";
-	    			html = html + "<ul class='departuretime'>";
-		    		for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
-		    			var trip = trips[arcs[i].times[j].trip_id]
-	    				html = html + "<li>" + trip.trip_headsign + " - " + arcs[i].times[j].departure_time + "</li>";
-		    			var shape = shapes[trip.shape_id];
-		    			if (shape != null)
-		    				shape.color = route.route_color;
-			    			hshapes[trip.shape_id] = shape;
-			    		}
-			    		if (j==0) {
-			    			html = html + "<li><i>No more departures today</i></li>";
-			    		}
-			    		html = html + "</ul>";
-		    		}
-		    		html = html + "</ul>";
-		    	}
-		    }
-		    html = html + "</div></div>";
-		    //displayShapes(hshapes);
-				infowindow = new google.maps.InfoWindow({
-					content: html
-				});
-				infowindow.open(marker.get('map'), marker);
-		}
-
-		function onStopSelect(marker) {
-			console.log('onStopSelect');
-			if (infowindow != null) {
-				infowindow.close();
-			}
-			if (origin != null) {
-				origin.marker.setIcon(normal);
-			}
-			// if origin selected and the marker is the origin then clear selection, no more details or shapes
-			if (origin == marker.stop) {
-				origin = null;
-				info = null;
-			}
-			// if no selection then the marker becomes the origin, details on next departures and the various shapes are on
-			else {
-				origin = marker.stop;
-				origin.marker.setIcon(selected);
-				var fn = findRoutes;
-				if (checknext)
-					fn = findRoutesAndNextDepartures;
-				fn(origin.stop_id, function(data) {
-					info = data;
-	  			displayDetails(marker, info);
-				});
-			}
-		}
-
-		function addMarkerEvent(marker) {
-			google.maps.event.addListener(marker, 'click',
-					function() {
-						onStopSelect(marker);
-					});
-		}
-
-		function setMarkers(map, stops) {
-			console.log('setMarkers');
-			for (var stop_id in stops) {
-				if (stop_id != "jsonid") {
-					var stop = stops[stop_id];
-					var myLatLng = new google.maps.LatLng(
-							stop.pos.lat, stop.pos.lon);
-					var marker = new google.maps.Marker({
-						position : myLatLng,
-						map : map,
-						icon : normal,
-						title : stop.stop_name
-					});
-					marker.stop = stop;
-					stop.marker = marker;
-					addMarkerEvent(marker);
-				}
-			}
-		}
-
-		function initialize() {
-			console.log('initialize');
-			// activate the spiner
-			$.mobile.loading('show', {
-				text : "loading the network...",
-				textVisible : true,
-				theme : "a",
-				textonly : false
-			});
-
-			// initiate the map
-			var mapOptions = {
-				center : new google.maps.LatLng(-34.397, 150.644),
-				zoom : 8,
-				mapTypeId : google.maps.MapTypeId.ROADMAP
-			};
-			map = new google.maps.Map(document
-					.getElementById('map-canvas'), mapOptions);
-
-			// retrieve the feed area and resize the map
-			network.getArea(function(area) {
-				map.fitBounds(new google.maps.LatLngBounds(
-						new google.maps.LatLng(area.min.lat,
-								area.min.lon), // sw
-						new google.maps.LatLng(area.max.lat,
-								area.max.lon))); // ne
-
-				// load bus stops and plot them on the map
-				network.getStops(function(stops) {
-					setMarkers(map, stops);
-					// load also routes and trips
-					getRoutes(function(routes) {
-						getTrips(function(trips) {
-  						getShapes(function(shapes) {
-    						// remove the spinner
-    						$.mobile.loading("hide");
-  						});
-						});
-					});
-				});
-			});
-		}
-	</script>
-
 </head>
-<body onload="initialize()">
-	<!-- main page, with an interactive map highliting stops in the selected network
-	-->
+<body>
+	<script>
+    $(document).ready(function() { mapview.initialize(); });
+    //$(document).delegate('div#settings', 'pageinit', function() { alert('settings!'); });
+    </script>
+	
+	<!-- main page, with an interactive map highliting stops in the selected network -->
 	<div data-role="page" id="home" data-title="GTFS viewer" data-theme="a">
 		<div data-role="content" class="content">
 		    <div id="map-canvas"/>
 		</div>
-		<div id="nav" data-role="footer" data-id="nav" data-position="fixed">
+		<div id="nav" data-role="footer" data-id="nav" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
 			<div data-role="navbar" data-iconpos="left">
 				<ul>
 					<li><a href="#home" data-icon="home" class="ui-btn-active ui-state-persist">Map</a></li>
