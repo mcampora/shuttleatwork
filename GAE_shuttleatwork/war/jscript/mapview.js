@@ -20,7 +20,7 @@ var mapview = {
     // create the markers and register event listeners
     initialize: function() {
     	console.log('initialize');
- 
+
 		// activate the spiner
         $.mobile.loading('show', {
             text : "loading the network...",
@@ -54,7 +54,7 @@ var mapview = {
                 network.getRoutes(function(routes) {
                     network.getTrips(function(trips) {
                     	network.getShapes(function(shapes) {
-                
+
                     		// remove the spinner
                         	$.mobile.loading("hide");
                     	});
@@ -63,7 +63,7 @@ var mapview = {
             });
         });
     },
-    
+
     // add a marker for each stop to the map
     setMarkers: function(map, stops) {
         console.log('setMarkers');
@@ -116,9 +116,56 @@ var mapview = {
 	            fn = network.findRoutesAndNextDepartures;
 	        fn(mapview.origin.stop_id, function(data) {
 	            mapview.info = data;
-	        	mapview.displayDetails(marker, mapview.info);
+	        	mapview.displayDetailsPannel(marker, mapview.info);
 	        });
 	    }
+	},
+
+	displayDetailsPannel: function(marker, info) {
+    	console.log('displayDetailsPannel');
+        var html = "<h3 id='stop'>"+ marker.stop.stop_name + "</h3>";
+		html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='a' data-content-theme='a' data-mini='false' data-corners='false'>";
+		for (var route_id in info) {
+			var route = routes[route_id];
+			// name of the route
+			//html = html + "<div data-role='collapsible' data-collapsed='false' style='background-color:#" + route.route_color + ";color:#" + route.route_text_color + "'>";
+			html = html + "<div data-role='collapsible' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + ";color:#FFFFFF'>";
+			html = html + "<h3>" + route.route_long_name + "<br/> (" + route.route_short_name + ")</h3>";
+			var arcs = info[route_id];
+			for (var i=0,len=arcs.length; i<len; i++) {
+		    	var arc = arcs[i];
+		    	var destination = stops[arc.destination_id];
+				html = html + "<ul id='nextstop' data-role='listview' data-divider-theme='a' data-inset='false'>";
+				// name of the next stop
+				for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
+	    			var trip = trips[arcs[i].times[j].trip_id]
+	    			if (j==0) {
+	    				html = html + "<li data-role='list-divider' role='heading'>" + trip.trip_headsign + "</li>";
+	    			}
+		    		html = html + "<li data-theme='c'>" + arcs[i].times[j].departure_time + "</li>";
+					//var shape = shapes[trip.shape_id];
+					//if (shape != null)
+		   	 			//shape.color = route.route_color;
+		    		//hshapes[trip.shape_id] = shape;
+				}
+				if (j==0) {
+		    		html = html + "<li data-theme='e'><i>No more departures today</i></li>";
+				}
+				html = html + "</ul>";
+			}
+			html = html + "</div>";
+		}
+		html = html + "</div>";
+		$("#details-content")[0].innerHTML = html;
+		$("#details").trigger("create");
+    	$("#details").panel("toggle");
+    	$("#details").panel({
+    		beforeclose: function(event, ui) {
+    			console.log("beforeclose");
+    	        mapview.origin.marker.setIcon(mapview.normalIcon);
+    	        mapview.origin = null;
+    		}
+    	});
 	},
 
 	// display the info window with next departures details
@@ -130,23 +177,23 @@ var mapview = {
 
 		// name of the stop
 		html = html + "<p class='stopname'>" + marker.stop.stop_name + "</p>";
-		
+
 		for (var route_id in info) {
 		    if (route_id != "jsonid") {
 				var route = routes[route_id];
-		
+
 				// name of the route
 				html = html + "<span class='route' style='background-color:#" + route.route_color +
 					";color:#" + route.route_text_color + ";'>" +
 					route.route_long_name +
 					" (" + route.route_short_name + ")</span>";
-		
+
 				html = html + "<ul class='tostop'>";
 				var arcs = info[route_id];
 				for (var i=0,len=arcs.length; i<len; i++) {
 		    		var arc = arcs[i];
 		    		var destination = stops[arc.destination_id];
-		
+
 					// name of the next stop
 					html = html + "<li>" + destination.stop_name + "</li>";
 					html = html + "<ul class='departuretime'>";
