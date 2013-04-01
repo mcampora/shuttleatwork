@@ -26,7 +26,7 @@ var mapview = {
             text : "loading the network...",
             textVisible : true,
             theme : "a",
-            textonly : false
+ 			textonly : false
         });
 
         // initiate the map
@@ -57,6 +57,18 @@ var mapview = {
 
                     		// remove the spinner
                         	$.mobile.loading("hide");
+							$( window ).on( "orientationchange", function( event ) {
+								var orientation = event.orientation;
+								console.log("orientationchange: " + orientation);
+	                   			if (orientation == "portrait") {
+									$("#tiltPopup").popup({ dismissible: false });
+									$("#tiltPopup").popup("open");
+	                   			}
+	                   			else {
+									$("#tiltPopup").popup("close");
+	                   			}
+							});
+							$( window ).orientationchange();
                     	});
                 	});
                 });
@@ -124,25 +136,25 @@ var mapview = {
 	displayDetailsPannel: function(marker, info) {
     	console.log('displayDetailsPannel');
         var html = "<h3 id='stop'>"+ marker.stop.stop_name + "</h3>";
-		html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='a' data-content-theme='a' data-mini='false' data-corners='false'>";
+		html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='az' data-content-theme='az' data-mini='true' data-corners='true'>";
 		for (var route_id in info) {
 			var route = routes[route_id];
 			// name of the route
 			//html = html + "<div data-role='collapsible' data-collapsed='false' style='background-color:#" + route.route_color + ";color:#" + route.route_text_color + "'>";
-			html = html + "<div data-role='collapsible' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + ";color:#FFFFFF'>";
-			html = html + "<h3>" + route.route_long_name + "<br/> (" + route.route_short_name + ")</h3>";
+			html = html + "<div data-role='collapsible' data-mini='true' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + "'>";
+			html = html + "<h6>" + route.route_long_name + " (" + route.route_short_name + ")</h6>";
 			var arcs = info[route_id];
 			for (var i=0,len=arcs.length; i<len; i++) {
 		    	var arc = arcs[i];
 		    	var destination = stops[arc.destination_id];
-				html = html + "<ul id='nextstop' data-role='listview' data-divider-theme='a' data-inset='false'>";
+				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
 				// name of the next stop
 				for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
 	    			var trip = trips[arcs[i].times[j].trip_id]
 	    			if (j==0) {
-	    				html = html + "<li data-role='list-divider' role='heading'>" + trip.trip_headsign + "</li>";
+	    				html = html + "<li data-role='list-divider'>" + trip.trip_headsign + "</li>";
 	    			}
-		    		html = html + "<li data-theme='c'>" + arcs[i].times[j].departure_time + "</li>";
+		    		html = html + "<li>" + arcs[i].times[j].departure_time + "</li>";
 					//var shape = shapes[trip.shape_id];
 					//if (shape != null)
 		   	 			//shape.color = route.route_color;
@@ -217,6 +229,12 @@ var mapview = {
 		// displayShapes(hshapes);
 		mapview.infowindow = new google.maps.InfoWindow({ content: html });
 		mapview.infowindow.open(marker.get('map'), marker);
+	},
+
+	/////
+	testOrientation: function() {
+		console.log("testOrientation");
+  		document.getElementById('block_land').style.display = (screen.width>screen.height) ? 'none' : 'block';
 	}
 
 };

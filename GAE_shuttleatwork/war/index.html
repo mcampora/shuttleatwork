@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+	
+	<!--
+	build paths
+	cut paths, next stop
+	-->
+	
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,48 +18,61 @@
 
 	<script type="text/javascript" src="/jscript/api.js"></script>
 	<script type="text/javascript" src="/jscript/mapview.js"></script>
-	<!--script type="text/javascript" src="/js/event.js"></script-->
 
 	<link rel="stylesheet" href="/style.css"></link>
 </head>
 <body>
 	<script>
-    $(document).ready(function() { mapview.initialize(); });
-    //$(document).delegate('div#settings', 'pageinit', function() { alert('settings!'); });
+	    $(document).ready(function() { 
+	    	mapview.initialize(); 
+	    });
+    	//$(document).delegate('div#settings', 'pageinit', function() { alert('settings!'); });
     </script>
-
+    
 	<!-- main page, with an interactive map highliting stops in the selected network -->
 	<div data-role="page" id="home" data-title="GTFS viewer" data-theme="a">
 		<div data-role="content" class="content">
 		    <div id="map-canvas"/>
 		</div>
-		<div id="nav" data-role="footer" data-id="nav" data-position="fixed" data-tap-toggle="false" data-fullscreen="false">
+		<div data-role="footer" data-id="nav" data-position="fixed" data-fullscreen="true" data-tap-toggle="false">
+			<!--h3>This is a footer</h3-->
 			<div data-role="navbar" data-iconpos="left">
 				<ul>
 					<li><a href="#home" data-icon="home" class="ui-btn-active ui-state-persist">Map</a></li>
-					<li><a href="settings.html" data-icon="gear">Settings</a></li>
+					<!--li><a href="settings.html" data-icon="gear">Settings</a></li-->
 					<li><a href="info.html" data-icon="info">Info</a></li>
 				</ul>
 			</div>
 		</div>
 	</div>
 
-  <div data-role="panel" id="details" data-position="right" data-display="overlay" data-theme="a">
-    <!-- panel content goes here -->
-    <div data-role="content" id="details-content">
-        <h3 id="stop">Main site</h3>
-        <div id="shuttle" data-role="collapsible-set" data-theme="a" data-content-theme="a">
-            <div data-role="collapsible" data-collapsed="false">
-                <h3>Amadeus shuttle - Naxos (SA)</h3>
-                <ul id="nextstop" data-role="listview" data-divider-theme="a" data-inset="false">
-                    <li data-role="list-divider" role="heading">Clara</li>
-                    <li data-theme="e">To Naxos - 11:40:00</li>
-                    <li data-theme="e">To Naxos - 12:05:00</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-  </div>
-
+	<!-- alert dialog, the application is not designed to work in portrait mode 
+		fired at load time or when the orientation is changing -->
+	<div data-role="popup" id="tiltPopup" data-theme="a">
+	    <div data-role="header" data-theme="a" class="ui-corner-top">
+	        <h1>Change the orientation</h1>
+	    </div>
+		<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+	        <h3 class="ui-title">Works better in landscape mode, tilt your device or resize your window please.</h3>
+	    </div>
+	</div>
+    	
+	<!-- info pannel, lists next departures for the selected stop -->
+	<div data-role="panel" id="details" data-position="right" data-display="overlay" data-theme="a">
+		<!-- panel content goes here -->
+		<div data-role="content" id="details-content">
+			<h3 id="stop">Main site</h3>
+			<div id="shuttle" data-role="collapsible-set" data-theme="a" data-content-theme="a">
+				<div data-role="collapsible" data-collapsed="false">
+					<h4>Amadeus shuttle - Naxos (SA)</h4>
+					<ul id="nextstop" data-role="listview" data-divider-theme="a" data-inset="false">
+						<li data-role="list-divider" role="heading">Clara</li>
+						<li data-theme="e">To Naxos - 11:40:00</li>
+						<li data-theme="e">To Naxos - 12:05:00</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
