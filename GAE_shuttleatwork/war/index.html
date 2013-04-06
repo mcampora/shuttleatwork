@@ -2,8 +2,11 @@
 <html>
 	
 	<!--
+	loading symbol for each server action as gae tend to passivate the application
+	optimise loas time (maybe defer file loading)
 	build paths
 	cut paths, next stop
+	use Jackson as Json serializer
 	-->
 	
 <head>
@@ -32,13 +35,13 @@
 	<!-- main page, with an interactive map highliting stops in the selected network -->
 	<div data-role="page" id="home" data-title="GTFS viewer" data-theme="a">
 		<div data-role="content" class="content">
-		    <div id="map-canvas"/>
+		<div id="map-canvas"/>
 		</div>
-		<div data-role="footer" data-id="nav" data-position="fixed" data-fullscreen="true" data-tap-toggle="false">
+		<div data-id="nav" data-role="footer" data-position="fixed" data-fullscreen="true" data-tap-toggle="false">
 			<!--h3>This is a footer</h3-->
 			<div data-role="navbar" data-iconpos="left">
 				<ul>
-					<li><a href="#home" data-icon="home" class="ui-btn-active ui-state-persist">Map</a></li>
+					<li><a href="#" data-icon="home" class="ui-btn-active ui-state-persist">Map</a></li>
 					<!--li><a href="settings.html" data-icon="gear">Settings</a></li-->
 					<li><a href="info.html" data-icon="info">Info</a></li>
 				</ul>
