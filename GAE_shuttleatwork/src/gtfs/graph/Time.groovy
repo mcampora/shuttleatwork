@@ -8,6 +8,7 @@ class Time {
 	String departure_time; // stoptime
 	String arrival_time; // stoptime
 	Date departure;
+	boolean nextDay = false;
 
 	def Time(def trip_id, def departure_time, def arrival_time) {
 		this.trip_id = trip_id
@@ -19,5 +20,9 @@ class Time {
 	boolean after(def departure_time) {
 		def current = fmt.parse(departure_time)
 		return departure.after(current)
+	}
+	
+	def clone() {
+		return new Time(trip_id, departure_time, arrival_time)
 	}
 }

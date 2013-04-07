@@ -8,40 +8,51 @@ class JSonTest extends GroovyTestCase {
 		def s;
 		def bb;
 	}
-	
+
 	static class BB {
 		def s;
-		def aa;
-	}
-	
-	public void testString() {
-		assertEquals JSon.transform("test"), "'test'"
-	}
-	
-	public void testArray() {	
-		  def b = []
-		  def a = [ "1", b ]
-		  b.add(a)
-		  assertEquals JSon.transform(a), "[ '1', [ { 'jsonref':1 },  ],  ]" // missing a jsonid for arrays
-	}
-	
-	public void testMap() {
-		  def c = [:]
-		  def d = [:]
-		  c["d"] = d
-		  d["c"] = c
-		  assertEquals JSon.transform(c), "{ 'jsonid':1, 'd':{ 'jsonid':2, 'c':{ 'jsonref':1 },  },  }"
-	}
 		
+		boolean b = true;
+		int i = 1;
+		String str = "msg";
+	}
+
+	public void testString() {
+		assertEquals JSon2.transform("test"), "\"test\""
+	}
+
+	public void testInteger() {
+		assertEquals JSon2.transform(1), "1"
+	}
+
+	public void testBoolean() {
+		assertEquals JSon2.transform(true), "true"
+	}
+
+	public void testArray() {
+		def b = [ "msg" ]
+		def a = [ 1, true, b ]
+		assertEquals JSon2.transform(a), "[ 1, true, [ \"msg\" ] ]"
+	}
+
+	public void testMap() {
+		def c = [:]
+		def d = [:]
+		c["d"] = d
+		d["int"] = 1
+		d["str"] = "msg"
+		d["bool"] = true
+		assertEquals JSon2.transform(c), 
+			"{ \"d\":{ \"int\":1, \"str\":\"msg\", \"bool\":true } }"
+	}
+
 	public void testObj() {
-		  def aa = new AA()
-		  def bb = new BB()
-		  aa.s = "aa"
-		  aa.bb = bb
-		  bb.s = "bb"
-		  assertEquals JSon.transform(aa), "{ 'jsonid':1, 'bb':{ 'jsonid':2, 's':'bb',  }, 's':'aa',  }"
-		  
-		  bb.aa = aa
-		  assertEquals JSon.transform(aa), "{ 'jsonid':1, 'bb':{ 'jsonid':2, 'aa':{ 'jsonref':1 }, 's':'bb',  }, 's':'aa',  }"
-	}	
+		def aa = new AA()
+		def bb = new BB()
+		aa.s = "aa"
+		aa.bb = bb
+		bb.s = "bb"
+		assertEquals JSon2.transform(aa), 
+			"{ \"bb\":{ \"b\":true, \"str\":\"msg\", \"i\":1, \"s\":\"bb\" }, \"s\":\"aa\" }"
+	}
 }

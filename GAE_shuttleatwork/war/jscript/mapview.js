@@ -12,9 +12,9 @@ var mapview = {
         anchor : new google.maps.Point(18, 40)
     },
     origin: null, // keep track of the user selection
-    checknext: false,
     info: null,
-    infowindow: null,
+    map: null,
+    spy: null,
 
     // initialize the mapcanvas, load the network,
     // create the markers and register event listeners
@@ -69,6 +69,9 @@ var mapview = {
 	                   			}
 							});
 							$( window ).orientationchange();
+							
+							// test drive
+							mapview.displayDrivingDirections(trips["SCup01"]);
                     	});
                 	});
                 });
@@ -76,6 +79,43 @@ var mapview = {
         });
     },
 
+    displayDrivingDirections: function(trip) {
+    	var directionsDisplay = new google.maps.DirectionsRenderer();
+    	directionsDisplay.setMap(map);
+    	var directionsService = new google.maps.DirectionsService();
+    	var coord = function(stop_id) {
+    		//console.log(stop_id);
+        	var s = stops[stop_id];
+        	var p = new google.maps.LatLng(s.stop_lat, s.stop_lon);
+        	return p;
+    	}
+    	var origin = coord(trip.stoptimes[0].stop_id);
+    	var destination = coord(trip.stoptimes.slice(-1)[0].stop_id);
+    	var waypoints = [];
+    	trip.stoptimes.slice(1,-1).forEach(function(obj) {
+        	waypoints.push({
+                location: coord(obj.stop_id),
+                stopover: true
+            });
+    	});
+    	var request = {
+    			origin: origin,
+    			destination: destination,
+    			travelMode: google.maps.TravelMode.DRIVING,
+    			unitSystem: google.maps.UnitSystem.METRIC,
+    			waypoints: waypoints, 
+    			optimizeWaypoints: false,
+    			provideRouteAlternatives: false
+    	};
+    	directionsService.route(request, function(result, status) {
+    		if (status == google.maps.DirectionsStatus.OK) {
+    			//console.log(JSON.stringify(result));
+    			directionsDisplay.setDirections(result);
+    			spy = result;
+    		}
+    	});
+    },
+    
     // add a marker for each stop to the map
     setMarkers: function(map, stops) {
         console.log('setMarkers');
@@ -106,9 +146,13 @@ var mapview = {
     // called when a stop is selected
 	onStopSelect: function(marker) {
 	    console.log('onStopSelect');
-	    if (mapview.infowindow != null) {
-	        mapview.infowindow.close();
-	    }
+ 
+	    // activate the spiner
+        $.mobile.loading('show', {
+            theme : "a",
+ 			textonly : false
+        });
+
 	    if (mapview.origin != null) {
 	        mapview.origin.marker.setIcon(mapview.normalIcon);
 	    }
@@ -123,12 +167,12 @@ var mapview = {
 	    else {
 	        mapview.origin = marker.stop;
 	        mapview.origin.marker.setIcon(mapview.selectedIcon);
-	        var fn = network.findRoutes;
-	        if (mapview.checknext)
-	            fn = network.findRoutesAndNextDepartures;
-	        fn(mapview.origin.stop_id, function(data) {
+	        network.findRoutesAndNextDepartures(mapview.origin.stop_id, function(data) {
 	            mapview.info = data;
 	        	mapview.displayDetailsPannel(marker, mapview.info);
+	        	// remove the spinner
+	        	$.mobile.loading("hide");
+
 	        });
 	    }
 	},
@@ -154,14 +198,18 @@ var mapview = {
 	    			if (j==0) {
 	    				html = html + "<li data-role='list-divider'>" + trip.trip_headsign + "</li>";
 	    			}
-		    		html = html + "<li>" + arcs[i].times[j].departure_time + "</li>";
+		    		html = html + "<li>" + arcs[i].times[j].departure_time;
+		    		if (arcs[i].times[j].nextDay == true) {
+		    			html = html + " (tomorrow)";		    			
+		    		}
+		    		html = html + "</li>";
 					//var shape = shapes[trip.shape_id];
 					//if (shape != null)
 		   	 			//shape.color = route.route_color;
 		    		//hshapes[trip.shape_id] = shape;
 				}
 				if (j==0) {
-		    		html = html + "<li data-theme='e'><i>No more departures today</i></li>";
+		    		html = html + "<li><i>No departures</i></li>";
 				}
 				html = html + "</ul>";
 			}

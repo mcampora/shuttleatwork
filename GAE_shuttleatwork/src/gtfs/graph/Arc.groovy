@@ -34,6 +34,13 @@ class Arc {
 				arc.times.add(time)
 			}
 		}
+		if (arc.times.size() == 0) {
+			times.each { time ->
+				def copy = time.clone()
+				copy.nextDay = true
+				arc.times.add(copy)
+			}
+		}
 		return arc
 	}
 }

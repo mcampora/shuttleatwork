@@ -15,7 +15,7 @@ class ActionsTest extends GroovyTestCase {
 	}
 
 	public void testFindRoutes() {
-		def rr = execute("findRoutes", [stop_id:['GREEN_SIDE']])
+		def rr = execute("findRoutes", [stop_id:['GREEN_SIDE_15']])
 		assert rr != null
 		assert rr.startsWith("{ \"SB\":[ { \"times\":[ { ");
 
@@ -29,19 +29,21 @@ class ActionsTest extends GroovyTestCase {
 	}
 
 	public void testFindRoutesAndNextDepartures() {
-		def rr = execute("findRoutesAndNextDepartures", [stop_id:['GREEN_SIDE']])
+		def rr = execute("findRoutesAndNextDepartures", [stop_id:['GREEN_SIDE_15']])
 		assert rr != null
 		assert rr.startsWith("{ \"SB\":[ { \"times\":[ ");
+		assert rr.contains("nextDay") == true
+		println rr
 	}
 
 	public void testGetArea() {
 		assertEquals execute("getArea", null),
-			"{ \"max\":{ \"lat\":43.626399, \"lon\":7.074561 }, \"min\":{ \"lat\":43.616287, \"lon\":7.041944 } }"
+			"{ \"max\":{ \"lat\":43.626399, \"lon\":7.075394 }, \"min\":{ \"lat\":43.616287, \"lon\":7.041944 } }"
 	}
 
 	public void testGetStops() {
 		assert execute("getStops", null).startsWith(
-			"{ \"GREEN_SIDE\":{ \"stop_id\":\"GREEN_SIDE\"");
+			"{ \"GREEN_SIDE_15\":{ \"stop_id\":\"GREEN_SIDE_15\"");
 	}
 
 	public void testHelloWorld() {

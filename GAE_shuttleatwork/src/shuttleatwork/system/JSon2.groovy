@@ -15,7 +15,9 @@ class JSon2 {
     }
 	
     // if simple Double, return its JSon representation
-    else if (obj instanceof Double) {
+    else if (	(obj instanceof Double) ||
+				(obj instanceof Integer) ||
+				(obj instanceof Boolean)) {
       res += obj
     }
 	

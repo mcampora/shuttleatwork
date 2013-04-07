@@ -49,7 +49,7 @@ class FeedReaderTest extends GroovyTestCase {
 	public void testTrips() {
 		def reader = new CsvFeedReader(rootpath, sname)
 		def trips = reader.readTrips()
-		assert trips.size() == 32
+		assert trips.size() == 44
 		assertEquals trips[0].getRoute_id(), "SA"
 		assertEquals trips[0].getService_id(), "WEEK"
 	}
@@ -57,14 +57,14 @@ class FeedReaderTest extends GroovyTestCase {
 	public void testStops() {
 		def reader = new CsvFeedReader(rootpath, sname)
 		def stops = reader.readStops()
-		assert stops.size() == 6
-		assertEquals stops[0].getStop_id(), "GREEN_SIDE"
+		assert stops.size() == 9
+		assertEquals stops[0].getStop_id(), "GREEN_SIDE_15"
 	}
 
 	public void testStoptimes() {
 		def reader = new CsvFeedReader(rootpath, sname)
 		def stoptimes = reader.readStoptimes()
-		assert stoptimes.size() == 112
+		assert stoptimes.size() == 167
 		assertEquals stoptimes[0].getTrip_id(), "SAup01"
 	}
 

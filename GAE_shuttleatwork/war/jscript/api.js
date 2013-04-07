@@ -14,7 +14,6 @@ var network = {
 
 	//get the stops and their respective position
 	getStops: function(fn) {
-		
 		$.getJSON("/scriptlet?action=getStops", function(obj) {
 			stops = obj;
 			if (fn != null) fn(stops);
@@ -57,7 +56,8 @@ var network = {
 	// and the next departures considering current time
 	findRoutesAndNextDepartures: function(id, fn) {
 		url = "/scriptlet?action=findRoutesAndNextDepartures&stop_id=" + id;
-		$.getJSON(url, function(obj){
+		$.getJSON(url, function(obj, textStatus, jqxhr){
+			//alert(jqxhr.responseText);
 			if (fn != null)	fn(obj);
 		});
 	}
