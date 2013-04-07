@@ -14,7 +14,7 @@ var mapview = {
     origin: null, // keep track of the user selection
     info: null,
     map: null,
-    spy: null,
+    shapes: null,
 
     // initialize the mapcanvas, load the network,
     // create the markers and register event listeners
@@ -71,7 +71,7 @@ var mapview = {
 							$( window ).orientationchange();
 							
 							// test drive
-							mapview.displayDrivingDirections(trips["SCup01"]);
+							//mapview.buildShape("SC1", "GREEN_SIDE_5", "TEMPLIERS");
                     	});
                 	});
                 });
@@ -79,7 +79,7 @@ var mapview = {
         });
     },
 
-    displayDrivingDirections: function(trip) {
+    buildShape: function(origin_id, destination_id, waypoint_ids) {
     	var directionsDisplay = new google.maps.DirectionsRenderer();
     	directionsDisplay.setMap(map);
     	var directionsService = new google.maps.DirectionsService();
@@ -89,21 +89,13 @@ var mapview = {
         	var p = new google.maps.LatLng(s.stop_lat, s.stop_lon);
         	return p;
     	}
-    	var origin = coord(trip.stoptimes[0].stop_id);
-    	var destination = coord(trip.stoptimes.slice(-1)[0].stop_id);
-    	var waypoints = [];
-    	trip.stoptimes.slice(1,-1).forEach(function(obj) {
-        	waypoints.push({
-                location: coord(obj.stop_id),
-                stopover: true
-            });
-    	});
+    	var origin = coord(origin_id);
+    	var destination = coord(destination_id);
     	var request = {
     			origin: origin,
     			destination: destination,
     			travelMode: google.maps.TravelMode.DRIVING,
     			unitSystem: google.maps.UnitSystem.METRIC,
-    			waypoints: waypoints, 
     			optimizeWaypoints: false,
     			provideRouteAlternatives: false
     	};
