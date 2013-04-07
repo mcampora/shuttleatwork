@@ -53,7 +53,7 @@ var mapview = {
                 // load also routes and trips
                 network.getRoutes(function(routes) {
                     network.getTrips(function(trips) {
-                    	network.getShapes(function(shapes) {
+                    	//network.getShapes(function(shapes) {
 
                     		// remove the spinner
                         	$.mobile.loading("hide");
@@ -72,7 +72,7 @@ var mapview = {
 							
 							// test drive
 							//mapview.buildShape("SC1", "GREEN_SIDE_5", "TEMPLIERS");
-                    	});
+                    	//});
                 	});
                 });
             });
