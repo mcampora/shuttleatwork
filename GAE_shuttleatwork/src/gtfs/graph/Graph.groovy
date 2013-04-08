@@ -37,8 +37,13 @@ class Graph {
     }
   }
 
+  // helper function used to identify the number of shapes the
+  // network should include to illustrate the various paths
   def getPaths() {
-
+    // get trips one by one
+    // find the origin of each trip
+    // then compute all possible paths starting from these origins
+    // return the resulting paths
   }
 
   def findRoutes(def start) {
