@@ -40,10 +40,15 @@ class ActionsTest extends GroovyTestCase {
 		assertEquals execute("getArea", null),
 			"{ \"max\":{ \"lat\":43.626399, \"lon\":7.075394 }, \"min\":{ \"lat\":43.616287, \"lon\":7.041944 } }"
 	}
-
+	
 	public void testGetStops() {
 		assert execute("getStops", null).startsWith(
 			"{ \"GREEN_SIDE_15\":{ \"stop_id\":\"GREEN_SIDE_15\"");
+	}
+
+	public void testGetPaths() {
+		assert execute("getPaths", null).startsWith(
+			"[ [");
 	}
 
 	public void testHelloWorld() {

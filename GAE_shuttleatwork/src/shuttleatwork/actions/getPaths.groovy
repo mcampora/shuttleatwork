@@ -9,5 +9,5 @@ import shuttleatwork.system.*
  */
 def paths = Facade.getInstance().graph.getPaths()
 def res = JSon2.transform(paths)
-println res
+//println res
 return res

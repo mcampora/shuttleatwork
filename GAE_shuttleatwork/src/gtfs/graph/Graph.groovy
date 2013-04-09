@@ -13,8 +13,11 @@ import gtfs.model.*
  */
 class Graph {
   Map<String,Edge> edges = [:] // stop_id -> Edge
+  Feed feed;
 
   def Graph(Feed feed) {
+	this.feed = feed
+	
     // create one edge for each stop
     feed.stops.each { stop_id, stop ->
       edges[stop_id] = new Edge(stop_id)
@@ -40,10 +43,20 @@ class Graph {
   // helper function used to identify the number of shapes the
   // network should include to illustrate the various paths
   def getPaths() {
+	def paths = []
     // get trips one by one
-    // find the origin of each trip
-    // then compute all possible paths starting from these origins
-    // return the resulting paths
+	feed.trips.each { trip_id, trip ->
+		// build the path corresponding to this trip
+		def path = []
+		trip.stoptimes.each { stoptime ->
+			path.add(stoptime.stop_id)
+		}
+		// if the path is new add it to the list
+		if (!paths.contains(path))
+			paths.add(path)
+	}
+	//println paths
+	return paths
   }
 
   def findRoutes(def start) {

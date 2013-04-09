@@ -78,4 +78,13 @@ class GraphTest extends GroovyTestCase {
 		assert r["SB"][0].times[0].departure_time.equals("11:30:00")
 		assert r["SB"][0].times[0].nextDay.equals(true)
 	}
+	
+	public void testGetPaths() {
+		def reader = new CsvFeedReader(rootpath, sname)
+		def feed = reader.read()
+		Graph g = new Graph(feed)
+		def r = g.getPaths()
+		assert r != null
+		assert r.size() == 6
+	}
 }
