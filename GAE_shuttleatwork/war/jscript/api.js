@@ -60,5 +60,13 @@ var network = {
 			//alert(jqxhr.responseText);
 			if (fn != null)	fn(obj);
 		});
+	},
+	
+	//get the various paths
+	getPaths: function(fn) {
+		$.getJSON("/scriptlet?action=getPaths", function(obj) {
+			paths = obj;
+			if (fn != null) fn(paths);
+		});
 	}
 }

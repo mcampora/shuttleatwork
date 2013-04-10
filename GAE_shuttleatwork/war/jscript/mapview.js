@@ -70,8 +70,8 @@ var mapview = {
 							});
 							$( window ).orientationchange();
 							
-							// test drive
-							//mapview.buildShape("SC1", "GREEN_SIDE_5", "TEMPLIERS");
+							// build shapes dynamically
+							mapview.buildShapes();
                     	//});
                 	});
                 });
@@ -79,7 +79,20 @@ var mapview = {
         });
     },
 
-    buildShape: function(origin_id, destination_id, waypoint_ids) {
+    buildShapes: function() {
+    	network.getPaths(function(paths) {
+			var i = 1;
+    		paths.forEach(function(obj) { 
+				if (i == 1) {
+					mapview.buildShape("SC" + i, obj);
+				}
+				i = i + 1;
+			});
+    	});
+    },
+    
+    buildShape: function(name, path) {
+		console.log(path); 
     	var directionsDisplay = new google.maps.DirectionsRenderer();
     	directionsDisplay.setMap(map);
     	var directionsService = new google.maps.DirectionsService();
@@ -89,11 +102,19 @@ var mapview = {
         	var p = new google.maps.LatLng(s.stop_lat, s.stop_lon);
         	return p;
     	}
-    	var origin = coord(origin_id);
-    	var destination = coord(destination_id);
+       	var origin = coord(path[0]);
+    	var destination = coord(path.slice(-1));
+    	var waypoint_ids = path.slice(1,-1);
+    	var waypoints = [];
+    	waypoint_ids.forEach(function(obj){
+    		waypoints.push({
+    	          location:coord(obj),
+    	    });
+    	});
     	var request = {
     			origin: origin,
     			destination: destination,
+    			waypoints: waypoints,
     			travelMode: google.maps.TravelMode.DRIVING,
     			unitSystem: google.maps.UnitSystem.METRIC,
     			optimizeWaypoints: false,
