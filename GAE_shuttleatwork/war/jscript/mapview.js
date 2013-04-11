@@ -109,6 +109,7 @@ var mapview = {
     	waypoint_ids.forEach(function(obj){
     		waypoints.push({
     	          location:coord(obj),
+    	          stopover: false
     	    });
     	});
     	var request = {
