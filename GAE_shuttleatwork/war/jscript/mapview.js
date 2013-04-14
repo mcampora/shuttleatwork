@@ -14,7 +14,7 @@ var mapview = {
     origin: null, // keep track of the user selection
     info: null,
     map: null,
-    shapes: {},
+    shapes: null,
 
     // initialize the mapcanvas, load the network,
     // create the markers and register event listeners
@@ -35,12 +35,12 @@ var mapview = {
             zoom : 8,
             mapTypeId : google.maps.MapTypeId.ROADMAP
         };
-        map = new google.maps.Map(document
+        mapview.map = new google.maps.Map(document
                 .getElementById('map-canvas'), mapOptions);
 
         // retrieve the feed area and resize the map
         network.getArea(function(area) {
-	        map.fitBounds(new google.maps.LatLngBounds(
+	        mapview.map.fitBounds(new google.maps.LatLngBounds(
 	                new google.maps.LatLng(area.min.lat,
 	                        area.min.lon), // sw
 	                new google.maps.LatLng(area.max.lat,
@@ -48,7 +48,7 @@ var mapview = {
 
             // load bus stops and plot them on the map
             network.getStops(function(stops) {
-                mapview.setMarkers(map, stops);
+                mapview.setMarkers(mapview.map, stops);
 
                 // load also routes and trips
                 network.getRoutes(function(routes) {
@@ -57,6 +57,8 @@ var mapview = {
 
                     		// remove the spinner
                         	$.mobile.loading("hide");
+                        	
+                        	// force landscape mode
 							$( window ).on( "orientationchange", function( event ) {
 								var orientation = event.orientation;
 								console.log("orientationchange: " + orientation);
@@ -70,8 +72,9 @@ var mapview = {
 							});
 							$( window ).orientationchange();
 							
-							// build shapes dynamically
-							mapview.buildShapes();
+							// build shapes for the routes dynamically
+							// using Google directions
+							mapview.shapes = mapview.buildShapes();
                     	//});
                 	});
                 });
@@ -80,17 +83,18 @@ var mapview = {
     },
 
     buildShapes: function() {
+    	var shapes = {};
+    	// get the different paths in the network
     	network.getPaths(function(paths) {
 			var i = 1;
     		paths.forEach(function(obj) { 
-				//if (i == 1) {
-					var name = "SH" + i;
-					var shape = mapview.buildShape(name, obj);
-					mapview.shapes[name] = shape;
-				//}
+				var name = "SH" + i;
+				var shape = mapview.buildShape(name, obj);
+				shapes[name] = shape;
 				i = i + 1;
 			});
     	});
+    	return shapes;
     },
     
     buildShape: function(name, path) {
@@ -141,6 +145,24 @@ var mapview = {
     		}
     	});
     	return ret;
+    },
+    
+    buildLine: function(shape) {
+		var linePoints = [];
+		shape.shape_pts.forEach(function(pt) {
+			linePoints.push(new google.maps.LatLng(pt.shape_pt_lat, pt.shape_pt_lon));
+		});
+		var line = new google.maps.Polyline({
+		    path: linePoints,
+			icons: [{
+				icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW },
+				offset: '100%'
+			}],		
+		    strokeColor: shape.color,
+		    strokeOpacity: 0.3,
+		    strokeWeight: 4
+		});
+		return line;
     },
     
     // add a marker for each stop to the map
@@ -208,7 +230,7 @@ var mapview = {
     	console.log('displayDetailsPannel');
         var html = "<h3 id='stop'>"+ marker.stop.stop_name + "</h3>";
 		html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='az' data-content-theme='az' data-mini='true' data-corners='true'>";
-		var hshapes = {};
+		var lines = [];
 		for (var route_id in info) {
 			var route = routes[route_id];
 			// name of the route
@@ -231,10 +253,12 @@ var mapview = {
 		    			html = html + " (tomorrow)";		    			
 		    		}
 		    		html = html + "</li>";
-					var shape = mapview.shapes[trip.shape_id];
-					if (shape != null)
-		   	 			shape.color = route.route_color;
-		    		hshapes[trip.shape_id] = shape;
+
+			    	// build a polyline for each shape
+		    		mapview.shapes[trip.shape_id].color = routes[trip.route_id].route_color;
+		    		var line = mapview.buildLine(mapview.shapes[trip.shape_id]);
+				    line.setMap(mapview.map);
+				    lines.push(line);
 				}
 				if (j==0) {
 		    		html = html + "<li><i>No departures</i></li>";
@@ -252,15 +276,16 @@ var mapview = {
     			console.log("beforeclose");
     	        mapview.origin.marker.setIcon(mapview.normalIcon);
     	        mapview.origin = null;
+    	        lines.forEach(function(line) { line.setMap(null); })
     		}
     	});
-    	mapview.displayShapes(hshapes);
 	},
 
 	// complete displayDetails
 	displayShapes: function(hshapes) {
 		console.log('displayShapes');
 		console.log(hshapes);
+		
 		for (var nshape in hshapes) {
 			var shape = hshapes[nshape];
 			console.log(shape);
@@ -270,8 +295,12 @@ var mapview = {
 			});
 			var line = new google.maps.Polyline({
 			    path: linePoints,
+				icons: [{
+					icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW },
+					offset: '100%'
+				}],		
 			    strokeColor: shape.color,
-			    strokeOpacity: 1.0,
+			    strokeOpacity: 0.5,
 			    strokeWeight: 3
 			});
 		    line.setMap(mapview.map);
