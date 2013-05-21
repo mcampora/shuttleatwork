@@ -1,11 +1,9 @@
 import junit.framework.Test;
-
 import junit.framework.TestSuite;
-import groovy.util.GroovyTestSuite;
 
 public class AllTests extends TestSuite {
 
-	@SuppressWarnings("unchecked")
+  // @SuppressWarnings("unchecked")
     public static Test suite() throws Exception {
 		TestSuite suite = new TestSuite(AllTests.class.getName());
 		//$JUnit-BEGIN$

@@ -57,7 +57,7 @@ var mapview = {
 
                     		// remove the spinner
                         	$.mobile.loading("hide");
-                        	
+
                         	// force landscape mode
 							$( window ).on( "orientationchange", function( event ) {
 								var orientation = event.orientation;
@@ -71,7 +71,7 @@ var mapview = {
 	                   			}
 							});
 							$( window ).orientationchange();
-							
+
 							// build shapes for the routes dynamically
 							// using Google directions
 							mapview.shapes = mapview.buildShapes();
@@ -87,7 +87,7 @@ var mapview = {
     	// get the different paths in the network
     	network.getPaths(function(paths) {
 			var i = 1;
-    		paths.forEach(function(obj) { 
+    		paths.forEach(function(obj) {
 				var name = "SH" + i;
 				var shape = mapview.buildShape(name, obj);
 				shapes[name] = shape;
@@ -96,9 +96,9 @@ var mapview = {
     	});
     	return shapes;
     },
-    
+
     buildShape: function(name, path) {
-		//console.log(path); 
+		//console.log(path);
     	//var directionsDisplay = new google.maps.DirectionsRenderer();
     	//directionsDisplay.setMap(map);
     	var directionsService = new google.maps.DirectionsService();
@@ -146,7 +146,7 @@ var mapview = {
     	});
     	return ret;
     },
-    
+
     buildLine: function(shape) {
 		var linePoints = [];
 		shape.shape_pts.forEach(function(pt) {
@@ -157,14 +157,14 @@ var mapview = {
 			icons: [{
 				icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW },
 				offset: '100%'
-			}],		
+			}],
 		    strokeColor: shape.color,
-		    strokeOpacity: 0.3,
+		    strokeOpacity: 0.6,
 		    strokeWeight: 4
 		});
 		return line;
     },
-    
+
     // add a marker for each stop to the map
     setMarkers: function(map, stops) {
         console.log('setMarkers');
@@ -195,7 +195,7 @@ var mapview = {
     // called when a stop is selected
 	onStopSelect: function(marker) {
 	    console.log('onStopSelect');
- 
+
 	    // activate the spiner
         $.mobile.loading('show', {
             theme : "a",
@@ -228,46 +228,56 @@ var mapview = {
 
 	displayDetailsPannel: function(marker, info) {
     	console.log('displayDetailsPannel');
+
+    	// Name of the selected stop as header
         var html = "<h3 id='stop'>"+ marker.stop.stop_name + "</h3>";
-		html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='az' data-content-theme='az' data-mini='true' data-corners='true'>";
-		var lines = [];
+
+        // initiate a collapsibleset
+        html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='az' data-content-theme='az' data-mini='true' data-corners='true'>";
+
+        // with one collapsible per route + trip (ex: Greenside 15 shuttle - Main site direction)
+        var lines = [];
 		for (var route_id in info) {
 			var route = routes[route_id];
-			// name of the route
-			//html = html + "<div data-role='collapsible' data-collapsed='false' style='background-color:#" + route.route_color + ";color:#" + route.route_text_color + "'>";
-			html = html + "<div data-role='collapsible' data-mini='true' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + "'>";
-			html = html + "<h6>" + route.route_long_name + " (" + route.route_short_name + ")</h6>";
 			var arcs = info[route_id];
 			for (var i=0,len=arcs.length; i<len; i++) {
 		    	var arc = arcs[i];
 		    	var destination = stops[arc.destination_id];
-				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
-				// name of the next stop
+
+				// for the next 3 departure times
 				for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
 	    			var trip = trips[arcs[i].times[j].trip_id]
 	    			if (j==0) {
-	    				html = html + "<li data-role='list-divider'>" + trip.trip_headsign + "</li>";
+	    				// initiate the collapsible for the route and trip
+	    				html = html + "<div id='trip' data-role='collapsible' data-mini='true' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + "'>";
+	    				html = html + "<h6>" + route.route_long_name + " (" + route.route_short_name + ")<br/>" + trip.trip_headsign + "</h6>";
+
+				    	// build a polyline for this collapsible
+			    		mapview.shapes[trip.shape_id].color = routes[trip.route_id].route_color;
+			    		var line = mapview.buildLine(mapview.shapes[trip.shape_id]);
+					    line.setMap(mapview.map);
+					    lines.push(line);
+
+					    // initiate a listview
+	    				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
 	    			}
+	    			// add a line to the listview for each departure time
 		    		html = html + "<li>" + arcs[i].times[j].departure_time;
 		    		if (arcs[i].times[j].nextDay == true) {
-		    			html = html + " (tomorrow)";		    			
+		    			html = html + " (tomorrow)";
 		    		}
 		    		html = html + "</li>";
-
-			    	// build a polyline for each shape
-		    		mapview.shapes[trip.shape_id].color = routes[trip.route_id].route_color;
-		    		var line = mapview.buildLine(mapview.shapes[trip.shape_id]);
-				    line.setMap(mapview.map);
-				    lines.push(line);
 				}
 				if (j==0) {
 		    		html = html + "<li><i>No departures</i></li>";
 				}
-				html = html + "</ul>";
+				// close the listview and collapsible
+				html = html + "</ul></div>";
 			}
-			html = html + "</div>";
 		}
+		// close the collapsibleset
 		html = html + "</div>";
+
 		$("#details-content")[0].innerHTML = html;
 		$("#details").trigger("create");
     	$("#details").panel("toggle");
@@ -276,16 +286,30 @@ var mapview = {
     			console.log("beforeclose");
     	        mapview.origin.marker.setIcon(mapview.normalIcon);
     	        mapview.origin = null;
-    	        lines.forEach(function(line) { line.setMap(null); })
+    	        lines.forEach(function(line){ line.setMap(null); })
     		}
     	});
+    	//$( "div#trip" ).collapsible({
+    		//expand: function( event, ui ) { alert('Expanded' + ui); }
+    		//});
+    	$( "div#trip" ).on( "expand", function( event, ui ) {
+			console.log('Expanded');
+			console.log(ui);
+			console.log(event);
+    		});
+
+    	//$( "div#trip" ).bind('expand', function () {
+    	  //  alert('Expanded' + ui);
+    	//}).bind('collapse', function () {
+    	  //  alert('Collapsed');
+    	//});
 	},
 
 	// complete displayDetails
 	displayShapes: function(hshapes) {
 		console.log('displayShapes');
 		console.log(hshapes);
-		
+
 		for (var nshape in hshapes) {
 			var shape = hshapes[nshape];
 			console.log(shape);
@@ -298,7 +322,7 @@ var mapview = {
 				icons: [{
 					icon: { path: google.maps.SymbolPath.FORWARD_OPEN_ARROW },
 					offset: '100%'
-				}],		
+				}],
 			    strokeColor: shape.color,
 			    strokeOpacity: 0.5,
 			    strokeWeight: 3

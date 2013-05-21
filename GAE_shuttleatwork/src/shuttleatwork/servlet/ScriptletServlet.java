@@ -1,15 +1,20 @@
 package shuttleatwork.servlet;
 
 import java.io.IOException;
-import javax.servlet.http.*;
-import shuttleatwork.server.*;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import shuttleatwork.server.ScriptService;
 
 @SuppressWarnings("serial")
 public class ScriptletServlet extends HttpServlet {
-	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+
+  @Override
+  public void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
-	
+
         resp.setContentType("text/plain");
 		String script = req.getParameter("action");
         if (script != null) {
@@ -21,7 +26,7 @@ public class ScriptletServlet extends HttpServlet {
             catch (Exception e) {
                 resp.sendError(500, "Script failed! " + script + ", " + e.toString());
             }
-        } 
+    }
         else {
             resp.sendError(500, "no action!");
         }
