@@ -88,7 +88,7 @@ var mapview = {
     	network.getPaths(function(paths) {
 			var i = 1;
     		paths.forEach(function(obj) {
-				var name = "SH" + i;
+				var name = "shape-SH" + i;
 				var shape = mapview.buildShape(name, obj);
 				shapes[name] = shape;
 				i = i + 1;
@@ -236,7 +236,7 @@ var mapview = {
         html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='az' data-content-theme='az' data-mini='true' data-corners='true'>";
 
         // with one collapsible per route + trip (ex: Greenside 15 shuttle - Main site direction)
-        var lines = [];
+        var lines = {};
 		for (var route_id in info) {
 			var route = routes[route_id];
 			var arcs = info[route_id];
@@ -249,14 +249,14 @@ var mapview = {
 	    			var trip = trips[arcs[i].times[j].trip_id]
 	    			if (j==0) {
 	    				// initiate the collapsible for the route and trip
-	    				html = html + "<div id='trip' data-role='collapsible' data-mini='true' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + "'>";
+	    				html = html + "<div id='shape-" + trip.shape_id + "' data-role='collapsible' data-mini='true' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + "'>";
 	    				html = html + "<h6>" + route.route_long_name + " (" + route.route_short_name + ")<br/>" + trip.trip_headsign + "</h6>";
 
 				    	// build a polyline for this collapsible
-			    		mapview.shapes[trip.shape_id].color = routes[trip.route_id].route_color;
-			    		var line = mapview.buildLine(mapview.shapes[trip.shape_id]);
-					    line.setMap(mapview.map);
-					    lines.push(line);
+			    		mapview.shapes["shape-" + trip.shape_id].color = routes[trip.route_id].route_color;
+			    		//var line = mapview.buildLine(mapview.shapes[trip.shape_id]);
+					    //line.setMap(mapview.map);
+					    //lines.push(line);
 
 					    // initiate a listview
 	    				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
@@ -286,23 +286,27 @@ var mapview = {
     			console.log("beforeclose");
     	        mapview.origin.marker.setIcon(mapview.normalIcon);
     	        mapview.origin = null;
-    	        lines.forEach(function(line){ line.setMap(null); })
+    	        for (var key in lines) {
+        	        var line = lines[key];
+        	        if (line != null) line.setMap(null);
+    	        }
     		}
     	});
-    	//$( "div#trip" ).collapsible({
-    		//expand: function( event, ui ) { alert('Expanded' + ui); }
-    		//});
-    	$( "div#trip" ).on( "expand", function( event, ui ) {
-			console.log('Expanded');
-			console.log(ui);
-			console.log(event);
-    		});
-
-    	//$( "div#trip" ).bind('expand', function () {
-    	  //  alert('Expanded' + ui);
-    	//}).bind('collapse', function () {
-    	  //  alert('Collapsed');
-    	//});
+    	$( "div[id|=shape]" ).on( "expand", function( event, ui ) {
+			console.log('Expand ' + event.target.id);
+			var line = lines[event.target.id];
+			if (line == null) {
+				line = mapview.buildLine(mapview.shapes[event.target.id]);
+				lines[event.target.id] = line;
+			}
+			line.setMap(mapview.map);
+    	});
+    	$( "div[id|=shape]" ).on( "collapse", function( event, ui ) {
+			console.log('Collapse ' + event.target.id);
+			var line = lines[event.target.id];
+			if (line != null) line.setMap(null);
+    	});
+    	$( "div[id|=shape]" ).trigger( "expand" );
 	},
 
 	// complete displayDetails
