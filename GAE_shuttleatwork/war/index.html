@@ -1,14 +1,5 @@
 <!DOCTYPE html>
 <html>
-	
-	<!--
-	loading symbol for each server action as gae tend to passivate the application
-	optimise loas time (maybe defer file loading)
-	build paths
-	cut paths, next stop
-	use Jackson as Json serializer
-	-->
-	
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,17 +20,16 @@
 	    $(document).ready(function() { 
 	    	mapview.initialize(); 
 	    });
-    	//$(document).delegate('div#settings', 'pageinit', function() { alert('settings!'); });
     </script>
     
-	<!-- main page, with an interactive map highliting stops in the selected network -->
+	<!-- main page, with an interactive map, and a highlight zone to detail the selection -->
 	<div data-role="page" id="home" data-title="GTFS viewer" data-theme="a">
 		<div data-role="content" class="content">
-			<div class="map-canvas-container">
-				<div id="map-canvas" class="map-canvas"></div>	
+			<div id="map-canvas-container">
+				<div id="map-canvas"></div>	
 			</div>
-			<div id="stop-details" class="stop-details">
-				<h3 id="stop">Stop info</h3>
+			<div id="map-details" class="map-details">
+				<h3 id="stop">Stop info...</h3>
 			</div>
 		</div>
 		<div data-id="nav" data-role="footer" data-position="fixed" data-fullscreen="true" data-tap-toggle="false">

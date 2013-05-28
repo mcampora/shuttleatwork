@@ -2,22 +2,25 @@ html { height: 100% }
 
 body { height: 100%; margin: 0; padding: 0 }
 
-.map-canvas-container { 
+#map-canvas-container { 
 	height: 100% ;
 	width: 80%;
 }
 
-.map-canvas { 
+#map-canvas { 
 	height: 100% ;
 	width: 100%;
 }
 
-#stop-details {
+#map-details {
 	position:absolute;
 	top: 0px;
 	left: 80%;
 	right: 0px;
-	padding: 15px;
+	padding-top: 0px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
 }
 
 .content {

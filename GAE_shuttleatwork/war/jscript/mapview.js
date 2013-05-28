@@ -19,7 +19,7 @@ var mapview = {
     // initialize the mapcanvas, load the network,
     // create the markers and register event listeners
     initialize: function() {
-    	console.log('initialize');
+    	console.log('initialize...');
 
 		// activate the spiner
         $.mobile.loading('show', {
@@ -62,11 +62,17 @@ var mapview = {
 								var orientation = event.orientation;
 								console.log("orientationchange: " + orientation);
 	                   			if (orientation == "portrait") {
+	                   				console.log('tiltPopup.open');
 									$("#tiltPopup").popup({ dismissible: false });
 									$("#tiltPopup").popup("open");
+									tiltPopup = true;
 	                   			}
 	                   			else {
-									$("#tiltPopup").popup("close");
+									if (tiltPopup == true) {
+		                   				console.log('tiltPopup.close');
+										$("#tiltPopup").popup("close");
+										tiltPopup = false;
+									}
 	                   			}
 							});
 							$( window ).orientationchange();
@@ -81,6 +87,10 @@ var mapview = {
         });
     },
 
+    // Edit function
+    // build shapes based on Google directions
+    // ask the server for the various paths 
+    // (sequences of stops)
     buildShapes: function() {
     	var shapes = {};
     	// get the different paths in the network
@@ -96,6 +106,8 @@ var mapview = {
     	return shapes;
     },
 
+    // Edit function
+    // build one shape based on one path
     buildShape: function(name, path) {
 		//console.log(path);
     	//var directionsDisplay = new google.maps.DirectionsRenderer();
@@ -146,6 +158,22 @@ var mapview = {
     	return ret;
     },
 
+    // Edit function
+    // print shapes in a GTFS format
+    // to save shapes computed with 
+    // Google directions
+    printShapes: function(shapes) {
+    	console.log("shape_id,shape_pt_lat,shape_pt_lon,shape_pt_sequence,shape_dist_traveled");
+    	for (k in shapes) { 
+    		var shape = shapes[k];
+    		shape.shape_pts.forEach(function(pt) {
+        		console.log(pt.shape_pt_id + ", " + pt.shape_pt_lat + ", " + pt.shape_pt_lon + ", " + pt.shape_pt_sequence + ", ");
+    		});
+    	}
+    },
+    
+    // translate a shape (a list of geo coordinates)
+    // into a polyline object that can be drawn on a map
     buildLine: function(shape) {
 		var linePoints = [];
 		shape.shape_pts.forEach(function(pt) {
@@ -209,6 +237,7 @@ var mapview = {
 	    if (mapview.origin == marker.stop) {
 	        mapview.origin = null;
 	        mapview.info = null;
+	        mapview.clearDetailsPannel();
 	    }
 	    // if no selection then the marker becomes the origin,
 	    // details on next departures and the various shapes are on
@@ -218,14 +247,94 @@ var mapview = {
 	        network.findRoutesAndNextDepartures(mapview.origin.stop_id, function(data) {
 	            mapview.info = data;
 	        	mapview.displayDetailsPannel(marker, mapview.info);
-	        	// remove the spinner
-	        	$.mobile.loading("hide");
-
 	        });
 	    }
+    	// remove the spinner
+    	$.mobile.loading("hide");
 	},
 
+	clearDetailsPannel: function() {
+    	console.log('cleqrDetailsPannel');
+    	$( "div[id|=shape]" ).trigger( "collapse" );
+        var html = "<h3 id='stop'>Stop info...</h3>";
+		$(" #map-details ")[0].innerHTML = html;
+		$(" #map-details ").trigger("create");
+	},
+	
 	displayDetailsPannel: function(marker, info) {
+    	console.log('displayDetailsPannel');
+
+    	$( "div[id|=shape]" ).trigger( "collapse" );
+
+    	// Name of the selected stop as header
+        var html = "<h3 id='stop'>"+ marker.stop.stop_name + "</h3>";
+
+        // initiate a collapsibleset
+        html = html + "<div id='shuttle' data-role='collapsible-set' data-theme='az' data-content-theme='az' data-mini='true' data-corners='true'>";
+
+        // with one collapsible per route + trip (ex: Greenside 15 shuttle - Main site direction)
+        var lines = {};
+		for (var route_id in info) {
+			var route = routes[route_id];
+			var arcs = info[route_id];
+			for (var i=0,len=arcs.length; i<len; i++) {
+		    	var arc = arcs[i];
+		    	var destination = stops[arc.destination_id];
+
+				// for the next 3 departure times
+				for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
+	    			var trip = trips[arcs[i].times[j].trip_id]
+	    			if (j==0) {
+	    				// initiate the collapsible for the route and trip
+	    				html = html + "<div id='" + trip.shape_id + "' data-role='collapsible' data-mini='true' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + "'>";
+	    				html = html + "<h6>" + route.route_long_name + " (" + route.route_short_name + ")<br/>" + trip.trip_headsign + "</h6>";
+
+				    	// build a polyline for this collapsible
+	    				console.log('---');
+	    				console.log(trip.shape_id);
+	    				console.log(trip.route_id);
+			    		mapview.shapes[trip.shape_id].color = routes[trip.route_id].route_color;
+			    		
+					    // initiate a listview
+	    				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
+	    			}
+	    			// add a line to the listview for each departure time
+		    		html = html + "<li>" + arcs[i].times[j].departure_time;
+		    		if (arcs[i].times[j].nextDay == true) {
+		    			html = html + " (tomorrow)";
+		    		}
+		    		html = html + "</li>";
+				}
+				if (j==0) {
+		    		html = html + "<li><i>No departures</i></li>";
+				}
+				// close the listview and collapsible
+				html = html + "</ul></div>";
+			}
+		}
+		// close the collapsibleset
+		html = html + "</div>";
+
+		$(" #map-details ")[0].innerHTML = html;
+		$(" #map-details ").trigger("create");
+    	$( "div[id|=shape]" ).on( "expand", function( event, ui ) {
+			console.log('Expand ' + event.target.id);
+			var line = lines[event.target.id];
+			if (line == null) {
+				line = mapview.buildLine(mapview.shapes[event.target.id]);
+				lines[event.target.id] = line;
+			}
+			line.setMap(mapview.map);
+    	});
+    	$( "div[id|=shape]" ).on( "collapse", function( event, ui ) {
+			console.log('Collapse ' + event.target.id);
+			var line = lines[event.target.id];
+			if (line != null) line.setMap(null);
+    	});
+    	$( "div[id|=shape]" ).trigger( "expand" );
+	},
+	
+	displayDetailsPannel2: function(marker, info) {
     	console.log('displayDetailsPannel');
 
     	// Name of the selected stop as header
@@ -252,7 +361,7 @@ var mapview = {
 	    				html = html + "<h6>" + route.route_long_name + " (" + route.route_short_name + ")<br/>" + trip.trip_headsign + "</h6>";
 
 				    	// build a polyline for this collapsible
-			    		mapview.shapes["shape-" + trip.shape_id].color = routes[trip.route_id].route_color;
+			    		//mapview.shapes["shape-" + trip.shape_id].color = routes[trip.route_id].route_color;
 			    		
 					    // initiate a listview
 	    				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
