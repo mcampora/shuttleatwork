@@ -23,6 +23,10 @@ body { height: 100%; margin: 0; padding: 0 }
 	padding-bottom: 15px;
 }
 
+.info-page {
+	padding: 15px;	
+}
+
 .content {
 	position:absolute;
 	left:0px;
