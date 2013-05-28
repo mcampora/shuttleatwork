@@ -35,7 +35,12 @@
 	<!-- main page, with an interactive map highliting stops in the selected network -->
 	<div data-role="page" id="home" data-title="GTFS viewer" data-theme="a">
 		<div data-role="content" class="content">
-		<div id="map-canvas"/>
+			<div class="map-canvas-container">
+				<div id="map-canvas" class="map-canvas"></div>	
+			</div>
+			<div id="stop-details" class="stop-details">
+				<h3 id="stop">Stop info</h3>
+			</div>
 		</div>
 		<div data-id="nav" data-role="footer" data-position="fixed" data-fullscreen="true" data-tap-toggle="false">
 			<!--h3>This is a footer</h3-->

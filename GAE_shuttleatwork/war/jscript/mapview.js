@@ -41,10 +41,8 @@ var mapview = {
         // retrieve the feed area and resize the map
         network.getArea(function(area) {
 	        mapview.map.fitBounds(new google.maps.LatLngBounds(
-	                new google.maps.LatLng(area.min.lat,
-	                        area.min.lon), // sw
-	                new google.maps.LatLng(area.max.lat,
-	                        area.max.lon))); // ne
+	                new google.maps.LatLng(area.min.lat, area.min.lon), // sw
+	                new google.maps.LatLng(area.max.lat, area.max.lon))); // ne
 
             // load bus stops and plot them on the map
             network.getStops(function(stops) {
@@ -53,8 +51,9 @@ var mapview = {
                 // load also routes and trips
                 network.getRoutes(function(routes) {
                     network.getTrips(function(trips) {
-                    	//network.getShapes(function(shapes) {
-
+                    	network.getShapes(function(shapes) {
+                    		mapview.shapes = shapes;
+                    		
                     		// remove the spinner
                         	$.mobile.loading("hide");
 
@@ -74,8 +73,8 @@ var mapview = {
 
 							// build shapes for the routes dynamically
 							// using Google directions
-							mapview.shapes = mapview.buildShapes();
-                    	//});
+							//mapview.shapes = mapview.buildShapes();
+                    	});
                 	});
                 });
             });
@@ -254,10 +253,7 @@ var mapview = {
 
 				    	// build a polyline for this collapsible
 			    		mapview.shapes["shape-" + trip.shape_id].color = routes[trip.route_id].route_color;
-			    		//var line = mapview.buildLine(mapview.shapes[trip.shape_id]);
-					    //line.setMap(mapview.map);
-					    //lines.push(line);
-
+			    		
 					    // initiate a listview
 	    				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
 	    			}
