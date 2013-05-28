@@ -54,7 +54,7 @@ var mapview = {
                     network.getTrips(function(trips) {
                     	network.getShapes(function(shapes) {
                     		mapview.shapes = shapes;
-                    		
+
                     		// remove the spinner
                         	$.mobile.loading("hide");
 
@@ -120,7 +120,7 @@ var mapview = {
 			var ptg = new google.maps.LatLng(pt.shape_pt_lat, pt.shape_pt_lon);
 			if (capture == false) {
 				//console.log(start.lat + " - " + pt.shape_pt_lat);
-				//console.log(start.lon + " - " + pt.shape_pt_lon);		
+				//console.log(start.lon + " - " + pt.shape_pt_lon);
 				var dist = google.maps.geometry.spherical.computeDistanceBetween(startg, ptg);
 				//console.log(dist);
 				if (dist < 20.0) {
@@ -213,7 +213,7 @@ var mapview = {
 		$(" #map-details ")[0].innerHTML = html;
 		$(" #map-details ").trigger("create");
 	},
-	
+
 	displayDetailsPannel: function(marker, info) {
     	//console.log('displayDetailsPannel');
 
@@ -243,10 +243,10 @@ var mapview = {
 
 				    	// build a polyline for this collapsible
 	    				//console.log('---');
-	    				//console.log(trip.shape_id);
+	    				console.log(trip.shape_id);
 	    				//console.log(trip.route_id);
 			    		mapview.shapes[trip.shape_id].color = routes[trip.route_id].route_color;
-			    		
+
 					    // initiate a listview
 	    				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";
 	    			}
@@ -285,7 +285,7 @@ var mapview = {
     	});
     	$( "div[id|=shape]" ).trigger( "expand" );
 	},
-	
+
 	// complete displayDetails
 	displayShapes: function(hshapes) {
 		console.log('displayShapes');
