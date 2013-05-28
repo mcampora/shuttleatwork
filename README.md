@@ -6,7 +6,7 @@ The objective is to build an easy to use Web application one can use to find the
 
 The application is designed to be deployed on Google App Engine and run in a mobile browser (ie. tablet or smartphone).
 
-![Alt text](/screen.png)
+![Screenshot](/screen.png)
 
 Technical environment
 ---------------------
