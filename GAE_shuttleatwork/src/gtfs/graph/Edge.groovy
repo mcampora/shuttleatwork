@@ -61,7 +61,7 @@ class Edge {
 		return null
 	}
 	
-	def findArcsAndTimes(def departure_time) {
+	def findRoutesAndTimes(def departure_time) {
 		def res_arcs = [:]
 		r_arcs.each { route_id, arcs ->
 			res_arcs[route_id] = []

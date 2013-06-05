@@ -8,7 +8,7 @@ import shuttleatwork.model.*
  * will be used for display
  */
 
-def res = Facade.getInstance().feed.getShapes()
+def res = Facade.getInstance().getFeed(req.feed[0]).getShapes()
 def sres = JSon2.transform(res)
 //println sres
 return sres

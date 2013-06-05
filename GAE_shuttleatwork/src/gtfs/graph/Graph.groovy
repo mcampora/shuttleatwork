@@ -16,6 +16,9 @@ class Graph {
   Feed feed;
 
   def Graph(Feed feed) {
+	print "Graph(" + feed.name + ")";
+	def t = System.currentTimeMillis();
+	
 	this.feed = feed
 	
     // create one edge for each stop
@@ -29,7 +32,7 @@ class Graph {
       // take each arrival to a given stop one by one
       Edge from = null
       StopTime prev = null
-      trip.getStoptimes().each { stoptime ->
+      feed.getStoptimes(trip_id).each { stoptime ->
         Edge to = edges[stoptime.stop_id]
         if (from != null) {
           from.addArc(trip.route_id, trip.trip_id, prev.departure_time, stoptime.stop_id, stoptime.arrival_time)
@@ -38,6 +41,7 @@ class Graph {
         prev = stoptime
       }
     }
+	println " (" + (System.currentTimeMillis() - t) + "ms)"
   }
 
   // helper function used to identify the number of shapes the
@@ -48,7 +52,7 @@ class Graph {
 	feed.trips.each { trip_id, trip ->
 		// build the path corresponding to this trip
 		def path = []
-		trip.stoptimes.each { stoptime ->
+		feed.getStoptimes(trip.trip_id).each { stoptime ->
 			path.add(stoptime.stop_id)
 		}
 		// if the path is new add it to the list
@@ -64,7 +68,7 @@ class Graph {
   }
 
   def findRoutesAndTimes(def start, def departure_time) {
-    return edges[start].findArcsAndTimes(departure_time)
+    return edges[start].findRoutesAndTimes(departure_time)
   }
 
   def findRoute(def start, def end) {

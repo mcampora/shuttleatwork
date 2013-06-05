@@ -8,7 +8,7 @@ import shuttleatwork.model.*
  */
 
 //println req.stop_id
-def routes = Facade.getInstance().graph.findRoutes(req.stop_id[0])
+def routes = Facade.getInstance().getGraph(req.feed[0]).findRoutes(req.stop_id[0])
 //println routes
 def res = JSon2.transform(routes)
 //println res

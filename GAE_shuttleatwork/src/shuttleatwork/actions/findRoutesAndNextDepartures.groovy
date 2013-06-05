@@ -9,7 +9,10 @@ import gtfs.graph.*
  */
 //println req.stop_id[0]
 
-def routes = Facade.getInstance().graph.findRoutesAndTimes(req.stop_id[0], 
+def feed = req.feed[0]
+def graph = Facade.getInstance().getGraph(feed)
+def routes = graph.findRoutesAndTimes(
+		req.stop_id[0], 
 		Time.fmt.format(Calendar.getInstance().getTime()))
 def res = JSon2.transform(routes)
 return res

@@ -15,11 +15,6 @@ class Trip {
 	String direction_id;
 	String block_id;
 	String shape_id;
-	List<StopTime> stoptimes = [];
-
-	def addStopTime(StopTime st) {
-		stoptimes.add(st);
-	}
 
 	String toString() {
 		return "[ route:'${route.getRoute_id()}', service:'${service.getService_id()}', trip_id:'$trip_id', " +

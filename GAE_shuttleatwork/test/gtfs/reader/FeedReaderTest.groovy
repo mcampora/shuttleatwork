@@ -30,13 +30,13 @@ class FeedReaderTest extends GroovyTestCase {
 			if (shape == null) {
 				shape = new Shape();
 				shape.setShape_id(pt.getShape_id());
-				feed.addShape(shape.getShape_id(), shape);
+				feed.addShape(shape);
 			}
 			shape.addPoint(pt);
 		})
-		assert feed.getShapes().size() == 4
-		assert shape_points.size() == 324
-		assertEquals shape_points[0].shape_id, "SB1"
+		assert feed.getShapes().size() == 6
+		assert shape_points.size() == 932
+		assertEquals shape_points[0].shape_id, "shape-SH1"
 	}
 
 	public void testCalendar() {
@@ -74,7 +74,7 @@ class FeedReaderTest extends GroovyTestCase {
 		assertEquals feed.getAgency().getAgency_id(), "1A-SEP"
 		assert feed.getStops() != null
 		assert feed.getStops().size() > 0
-		assert feed.getShapes().size() == 4
+		assert feed.getShapes().size() == 6
 		assert feed.getTrips().size() > 0
 	}
 }

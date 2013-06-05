@@ -26,34 +26,34 @@ class CsvFeedReader {
 		feed.name = name
 		readAgency({ agency -> feed.setAgency(agency) })
 		readRoutes({ route ->
-			feed.addRoute(route.getRoute_id(), route);
+			feed.addRoute(route);
 		})
 		readShapes({ pt ->
 			Shape shape = feed.getShape(pt.getShape_id());
 			if (shape == null) {
 				shape = new Shape();
 				shape.setShape_id(pt.getShape_id());
-				feed.addShape(shape.getShape_id(), shape);
+				feed.addShape(shape);
 			}
 			shape.addPoint(pt);
 		})
-		readCalendars({ cal -> feed.addCalendar(cal.getService_id(), cal) })
+		readCalendars({ cal -> feed.addCalendar(cal) })
 		readTrips({ trip ->
-			feed.addTrip(trip.getTrip_id(), trip)
+			feed.addTrip(trip)
 		})
 		readStops({ stop ->
-			feed.addStop(stop.getStop_id(), stop)
+			feed.addStop(stop)
 		})
 		readStoptimes({ stoptime ->
-			Trip t = feed.getTrip(stoptime.getTrip_id())
-			t.addStopTime(stoptime);
+			feed.addStoptime(stoptime)
 		})
 		return feed
 	}
 
 	def readFile(def name, def clazz, def closure) {
 		def reader = new Reader(clazz, closure)
-		return reader.translate(path + name)
+		def res = reader.translate(path + name)
+		return res
 	}
 
 	def readAgency(closure) {

@@ -30,8 +30,11 @@ class Reader {
 		def res = []
 		def head = null
 
-		println file
-		getClass().getClassLoader().getResourceAsStream(file).eachLine { line ->
+		def t = System.currentTimeMillis()
+		print file
+		InputStream is = getClass().getClassLoader().getResourceAsStream(file)
+		BufferedInputStream bis = new BufferedInputStream(is)
+		bis.eachLine { line ->
 		//new File(file).eachLine { line ->
 			if (!head) {
 				head = line.split(",")
@@ -41,6 +44,8 @@ class Reader {
 				res.add(obj)
 			}
 		}
+		bis.close()
+		println " (" + (System.currentTimeMillis() - t) + "ms)"
 		return res
 	}
 
@@ -54,12 +59,14 @@ class Reader {
 		def obj = clazz.newInstance()
 		def data = line.split(",")
 		data.eachWithIndex { colvalue, i ->
-			def colname = head[i]
-			if (expando) {
-				obj.metaClass."$colname" = colvalue
-			} 
-			else {
-				obj."$colname" = colvalue
+			if (colvalue) {
+				def colname = head[i]
+				if (expando) {
+					obj.metaClass."$colname" = colvalue
+				} 
+				else {
+					obj."$colname" = colvalue
+				}
 			}
 		}
 		if (closure) {

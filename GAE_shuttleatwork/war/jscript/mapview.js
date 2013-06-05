@@ -215,7 +215,9 @@ var mapview = {
 	},
 
 	displayDetailsPannel: function(marker, info) {
-    	//console.log('displayDetailsPannel');
+    	console.log('displayDetailsPannel');
+    	console.log(marker);
+    	console.log(info);
 
     	$( "div[id|=shape]" ).trigger( "collapse" );
 
@@ -235,17 +237,23 @@ var mapview = {
 
 				// for the next 3 departure times
 				for (var j=0,jlen=arcs[i].times.length; (j<jlen && j<3); j++) {
-	    			var trip = trips[arcs[i].times[j].trip_id]
+	    			var trip = trips[arcs[i].times[j].trip_id];
 	    			if (j==0) {
 	    				// initiate the collapsible for the route and trip
 	    				html = html + "<div id='" + trip.shape_id + "' data-role='collapsible' data-mini='true' data-collapsed='false' data-inset='false' style='background-color:#" + route.route_color + "'>";
-	    				html = html + "<h6>" + route.route_long_name + " (" + route.route_short_name + ")<br/>" + trip.trip_headsign + "</h6>";
+	    				html = html + "<h6>" + route.route_long_name;
+	    				if (route.route_short_name)
+	    					html = html + " (" + route.route_short_name + ")";
+	    				html = html + "<br/>" + trip.trip_headsign + "</h6>";
 
-				    	// build a polyline for this collapsible
-	    				//console.log('---');
+	    				// set shape color
 	    				console.log(trip.shape_id);
-	    				//console.log(trip.route_id);
-			    		mapview.shapes[trip.shape_id].color = routes[trip.route_id].route_color;
+			    		var shape = mapview.shapes[trip.shape_id]
+	    				console.log(route);
+			    		if (shape != null) {
+			    			shape.color = route.route_color;
+		    				console.log(shape.color);
+			    		}
 
 					    // initiate a listview
 	    				html = html + "<ul id='nextstop' data-role='listview' data-theme='c' data-divider-theme='d' data-inset='false'>";

@@ -22,7 +22,7 @@ class JSon2 {
     }
 	
     // if it is an Array or a List
-    else if (obj instanceof List) {
+    else if ((obj instanceof List) || (obj instanceof Set)) {
       // open bracket
       res += "[ "
       // iterates over the elements

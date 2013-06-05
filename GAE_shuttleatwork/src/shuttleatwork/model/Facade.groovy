@@ -2,19 +2,17 @@ package shuttleatwork.model
 
 import gtfs.reader.*
 import gtfs.graph.*
+import gtfs.model.*
 import shuttleatwork.system.Env
 
 class Facade {
 	static def PATH = "rsc"
 	static def DEFAULT_FEED = "1Ashuttle"
 
-	def feed;
-	def graph;
+	private Map<String, Feed> feeds = new HashMap<String, Feed>();
+	private Map<String, Graph> graphs = new HashMap<String, Graph>();
 
 	def Facade() {
-		def reader = new CsvFeedReader(PATH, DEFAULT_FEED)
-		feed = reader.read()
-		graph = new Graph(feed)
 	}
 
 	static def instance = null
@@ -23,11 +21,30 @@ class Facade {
 			instance = 	new Facade()
 		return instance
 	}
+	
+	void loadFeed(String name) {
+		def reader = new CsvFeedReader(PATH, name)
+		feeds[name] = reader.read()
+		graphs[name] = new Graph(feeds[name])
+	}
+	
+	Graph getGraph(String name = DEFAULT_FEED) {
+		if (name == null) name = DEFAULT_FEED
+		def graph = graphs[name]
+		if (graph == null) {
+			loadFeed(name)
+			graph = graphs[name]
+		}
+		return graph
+	}
 
-	List<String> getNetworks() {
-		List<String> res = []
-		res.add("A")
-		res.add("B")
-		return res;
+	Feed getFeed(String name = DEFAULT_FEED) {
+		if (name == null) name = DEFAULT_FEED
+		def feed = feeds[name]
+		if (feed == null) {
+			loadFeed(name)
+			feed = feeds[name]
+		}
+		return feed
 	}
 }
