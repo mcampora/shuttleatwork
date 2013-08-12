@@ -4,7 +4,7 @@ GTFS prototype.
 
 The objective is to build an easy to use Web application one can use to find the next shuttle departure.
 
-The application is designed to be deployed on Google App Engine and run in a mobile browser (ie. tablet or smartphone).
+The application is designed to be deployed on [Google App Engine](http://shuttleatwork.appspot.com/) and run in a mobile browser (ie. tablet or smartphone).
 
 ![Screenshot](/screen.png)
 
